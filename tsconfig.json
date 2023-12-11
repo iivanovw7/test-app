@@ -1,15 +1,47 @@
 {
-  "compilerOptions": {
-    // Enable top-level await, and other modern ESM features.
-    "target": "ESNext",
-    "module": "ESNext",
-    // Enable node-style module resolution, for things like npm package imports.
-    "moduleResolution": "node",
-    // Enable JSON imports.
-    "resolveJsonModule": true,
-    // Enable stricter transpilation for better output.
-    "isolatedModules": true,
-    // Add type definitions for our Vite runtime.
-    "types": ["vite/client"]
-  }
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "astro/tsconfigs/base",
+    "compilerOptions": {
+        "allowJs": true,
+        "outDir": "./dist",
+        "baseUrl": "./",
+        "jsx": "react-jsx",
+        "jsxImportSource": "@builder.io/qwik",
+        "lib": ["ESNext", "DOM"],
+        "noImplicitAny": false,
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "strict": true,
+        "noImplicitOverride": true,
+        "noUnusedLocals": true,
+        "esModuleInterop": true,
+        "useUnknownInCatchVariables": false,
+        "composite": false,
+        "declarationMap": false,
+        "forceConsistentCasingInFileNames": true,
+        "inlineSources": false,
+        "isolatedModules": true,
+        "skipLibCheck": true,
+        "noUnusedParameters": false,
+        "preserveWatchOutput": true,
+        "experimentalDecorators": true,
+        "resolveJsonModule": true,
+        "removeComments": true,
+        "types": ["node", "vite/client"],
+        "paths": {
+            "path-to-regexp": ["node_modules/path-to-regexp/dist/index"],
+            "@/*": ["src/*"],
+            "#/*": ["types/*"]
+        }
+    },
+    "include": [
+        "./src/**/*.ts",
+        "./src/**/*.astro",
+        "./src/**/*.tsx",
+        "./src/**/*.d.ts",
+        "./types/**/*.ts",
+        "./types/**/*.d.ts"
+    ],
+    "exclude": ["**/node_modules/**", "**/dist/**", "**/build/**"]
 }

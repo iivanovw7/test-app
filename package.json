@@ -1,15 +1,81 @@
 {
-  "name": "@example/basics",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview"
-  },
-  "devDependencies": {
-    "@astrojs/vercel": "^3.5.0",
-    "astro": "^2.6.4"
-  }
+    "name": "test-app",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "astro dev",
+        "start": "astro dev",
+        "build": "astro build",
+        "clean": "rimraf node_modules dist",
+        "lint": "eslint 'src/**/*.{ts,tsx,astro}'",
+        "lint:fix": "pnpm run lint --fix",
+        "stylelint": "stylelint 'src/**/*.{css,scss,astro}' --custom-formatter=node_modules/stylelint-formatter-pretty/index.js",
+        "stylelint:fix": "pnpm stylelint --fix",
+        "format": "prettier-eslint --write \"src/**/*.{js,jsx,ts,tsx}\"",
+        "preview": "astro preview",
+        "preinstall": "npx only-allow pnpm",
+        "pre-commit": "pnpm typecheck && pnpm lint && pnpm run stylelint && pnpm format",
+        "prepare": "husky install",
+        "reinstall": "pnpm clean && pnpm install",
+        "typecheck": "tsc --noEmit"
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog",
+            "useEmoji": true
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iivanovw7/test-app.git"
+    },
+    "devDependencies": {
+        "@astrojs/vercel": "3.5.0",
+        "@azat-io/eslint-config": "1.6.0",
+        "@azat-io/eslint-config-astro": "1.6.0",
+        "@azat-io/eslint-config-typescript": "1.6.0",
+        "@types/node": "18.16.18",
+        "@typescript-eslint/eslint-plugin": "6.12.0",
+        "@typescript-eslint/parser": "6.12.0",
+        "astro": "2.6.4",
+        "astro-eslint-parser": "0.16.0",
+        "commitizen": "4.3.0",
+        "cz-git": "1.8.0",
+        "eslint": "8.54.0",
+        "eslint-config-turbo": "1.10.16",
+        "eslint-define-config": "2.0.0",
+        "eslint-import-resolver-typescript": "3.6.1",
+        "eslint-plugin-astro": "0.29.1",
+        "eslint-plugin-import": "2.29.0",
+        "eslint-plugin-jsdoc": "46.9.0",
+        "eslint-plugin-jsx-a11y": "6.8.0",
+        "eslint-plugin-n": "16.3.1",
+        "eslint-plugin-node": "11.1.0",
+        "eslint-plugin-node-import": "1.0.4",
+        "eslint-plugin-perfectionist": "2.4.2",
+        "eslint-plugin-prefer-arrow": "1.2.3",
+        "eslint-plugin-prefer-let": "3.0.1",
+        "eslint-plugin-promise": "6.1.1",
+        "eslint-plugin-qwik": "1.2.6",
+        "eslint-plugin-sonarjs": "0.21.0",
+        "eslint-plugin-tailwindcss": "3.13.0",
+        "eslint-plugin-typescript-enum": "2.1.0",
+        "eslint-plugin-unicorn": "48.0.1",
+        "eslint-plugin-vitest": "0.3.10",
+        "husky": "8.0.3",
+        "path-to-regexp": "6.2.1",
+        "prettier": "3.1.0",
+        "prettier-eslint-cli": "8.0.1",
+        "rimraf": "5.0.5",
+        "stylelint": "16.0.1",
+        "stylelint-config-astro": "1.0.4",
+        "stylelint-config-clean-order": "5.2.0",
+        "stylelint-config-recommended": "14.0.0",
+        "stylelint-config-standard": "35.0.0",
+        "stylelint-config-tailwindcss": "0.0.7",
+        "stylelint-formatter-pretty": "4.0.0",
+        "typescript": "5.2.2",
+        "vite": "5.0.7"
+    }
 }

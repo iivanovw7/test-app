@@ -18,7 +18,7 @@ const city = decodeURIComponent(Astro.request.headers.get('x-vercel-ip-city'))
 
 <style>
 	:root {
-		--color-border: hsl(17, 24%, 90%);
+		--color-border: hsl(17deg 24% 90%);
 		--astro-gradient: linear-gradient(0deg,#4F39FA, #DA62C4);
 		--night-sky-gradient: linear-gradient(0deg, #392362 -33%, #431f69 10%, #30216b 50%, #1f1638 100%);
 	}
@@ -34,46 +34,53 @@ const city = decodeURIComponent(Astro.request.headers.get('x-vercel-ip-city'))
 	}
 
 	code {
+		padding: 0.15em 0.25em;
 		font-size: 0.875em;
 		border: 0.1em solid var(--color-border);
 		border-radius: 4px;
-		padding: 0.15em 0.25em;
 	}
 
 	main {
+		max-width: 60ch;
 		margin: auto;
     padding: 1em;
-		max-width: 60ch;
 	}
 
 	.text-gradient {
 		font-weight: 900;
+
 		background-image: var(--astro-gradient);
-		-webkit-background-clip: text;
-  	-webkit-text-fill-color: transparent;
-		background-size: 100% 200%;
 		background-position-y: 100%;
+		background-clip: text;
+		background-size: 100% 200%;
 		border-radius: 0.4rem;
+
 		animation: pulse 4s ease-in-out infinite;
+
+  	    -webkit-text-fill-color: transparent;
 	}
 
 	@keyframes pulse {
 		0%, 100% {
 			background-position-y: 0%;
 		}
+
 		50% {
 			background-position-y: 80%;
 		}
 	}
 
 	.banner {
-		background-image: var(--night-sky-gradient);
-		padding: 0.5rem 1.5rem;
-		border-radius: 0.4rem;
-		color: var(--color-bg);
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
 		gap: 1rem;
+
+		padding: 0.5rem 1.5rem;
+
+		color: var(--color-bg);
+
+		background-image: var(--night-sky-gradient);
+		border-radius: 0.4rem;
 	}
 
 	.banner strong {
@@ -81,9 +88,9 @@ const city = decodeURIComponent(Astro.request.headers.get('x-vercel-ip-city'))
 	}
 
 	.footer {
+		margin-top: 3rem;
 		font-size: 0.8rem;
 		text-align: center;
-		margin-top: 3rem;
 	}
 
 	.footer a {
