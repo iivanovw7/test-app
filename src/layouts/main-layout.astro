@@ -1,0 +1,11 @@
+---
+
+import RootLayout from "./root-layout.astro";
+
+const { description, title, tags, slug } = Astro.props;
+
+---
+
+<RootLayout description={description} title={title} tags={tags} slug={slug}>
+    <slot />
+</RootLayout>

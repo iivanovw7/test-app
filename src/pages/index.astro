@@ -1,99 +1,25 @@
 ---
-import Layout from '../components/Layout.astro';
 
-const ip = Astro.request.headers.get('x-real-ip')
-const city = decodeURIComponent(Astro.request.headers.get('x-vercel-ip-city'))
+import MainLayout from "@/layouts/main-layout.astro";
+import { apiRoutes, routes } from "@/shared/routes";
+import { ACCESS_TOKEN_KEY } from "@/shared/api";
+import { Home } from "@/widgets";
+
+const { API_URL } = import.meta.env; 
+
+const usersCountResponse = await fetch(`${API_URL}/${apiRoutes.userCount.path}`);
+
+const profileResponse = await fetch(`${API_URL}/${apiRoutes.getMe.path}`, {
+    headers: {
+        [ACCESS_TOKEN_KEY]: Astro.cookies.get(ACCESS_TOKEN_KEY)?.value ?? null
+    },
+});
+
+const userCount = await usersCountResponse.json();
+const profileResult = await profileResponse.json();
+
 ---
 
-<Layout title="Astro Vercel Edge">
-	<main>
-		<h1>Hello from the <span class="text-gradient">Edge</span></h1>
-		<div class="banner">
-			<p>Your city<br /><strong>{city}</strong></p>
-			<p>Your IP address<br /><strong>{ip}</strong></p>
-		</div>
-		<p class="footer">Built with <a href="https://github.com/withastro/astro">Astro</a> and <a href="https://github.com/withastro/astro/tree/main/packages/integrations/vercel">@astrojs/vercel</a> — <a href="https://github.com/JuanM04/astro-on-the-edge">Source</a></p>
-	</main>
-</Layout>
-
-<style>
-	:root {
-		--color-border: hsl(17deg 24% 90%);
-		--astro-gradient: linear-gradient(0deg,#4F39FA, #DA62C4);
-		--night-sky-gradient: linear-gradient(0deg, #392362 -33%, #431f69 10%, #30216b 50%, #1f1638 100%);
-	}
-
-	h2 {
-		margin: 0;
-		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-	}
-
-	h2 span {
-		display: inline-block;
-		transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-	}
-
-	code {
-		padding: 0.15em 0.25em;
-		font-size: 0.875em;
-		border: 0.1em solid var(--color-border);
-		border-radius: 4px;
-	}
-
-	main {
-		max-width: 60ch;
-		margin: auto;
-    padding: 1em;
-	}
-
-	.text-gradient {
-		font-weight: 900;
-
-		background-image: var(--astro-gradient);
-		background-position-y: 100%;
-		background-clip: text;
-		background-size: 100% 200%;
-		border-radius: 0.4rem;
-
-		animation: pulse 4s ease-in-out infinite;
-
-  	    -webkit-text-fill-color: transparent;
-	}
-
-	@keyframes pulse {
-		0%, 100% {
-			background-position-y: 0%;
-		}
-
-		50% {
-			background-position-y: 80%;
-		}
-	}
-
-	.banner {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-
-		padding: 0.5rem 1.5rem;
-
-		color: var(--color-bg);
-
-		background-image: var(--night-sky-gradient);
-		border-radius: 0.4rem;
-	}
-
-	.banner strong {
-		font-size: 1.75em;
-	}
-
-	.footer {
-		margin-top: 3rem;
-		font-size: 0.8rem;
-		text-align: center;
-	}
-
-	.footer a {
-		text-decoration: none;
-	}
-</style>
+<MainLayout slug={routes.home.path} description="Website" title="Home">
+    <Home profile={profileResult?.data?.user} userCount={userCount?.data?.count} slug={routes.home.path} />
+</MainLayout>

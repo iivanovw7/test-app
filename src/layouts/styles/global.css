@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        scrollbar-color: rgba(136, 154, 201, 0.3) transparent;
+        scrollbar-width: auto;
+    }
+
+    *::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: transparent;
+        box-shadow: none;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: rgba(136, 154, 201, 0.3);
+        border-radius: calc(4px / 2);
+    }
+
+    body {
+        @apply min-h-screen flex flex-col;
+        @apply bg-stone-200 dark:bg-stone-900 text-gray-800 dark:text-gray-100;
+    }
+
+    html {
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill,
+        textarea:-webkit-autofill:hover,
+        textarea:-webkit-autofill:focus,
+        select:-webkit-autofill,
+        select:-webkit-autofill:hover,
+        select:-webkit-autofill:focus {
+            background: theme("colors.stone.300") !important;
+        }
+    }
+
+    html.dark {
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill,
+        textarea:-webkit-autofill:hover,
+        textarea:-webkit-autofill:focus,
+        select:-webkit-autofill,
+        select:-webkit-autofill:hover,
+        select:-webkit-autofill:focus {
+            background: theme("colors.stone.800") !important;
+        }
+    }
+}

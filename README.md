@@ -2,6 +2,12 @@
 
 >
 
+## Environment
+
+```bash
+MONGODB_URI="mongodb+srv://<username>:<password>@link"
+```
+
 ## Setup
 
 ```bash
@@ -14,12 +20,9 @@ chmod ug+x .husky/*
 ```
 /
 ├── public/
-│   └── favicon.ico
 ├── src/
 │   ├── components/
-│   │   └── Layout.astro
 │   └── pages/
-│       └── index.astro
 └── package.json
 ```
 

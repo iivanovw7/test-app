@@ -7,7 +7,7 @@
         "baseUrl": "./",
         "jsx": "react-jsx",
         "jsxImportSource": "@builder.io/qwik",
-        "lib": ["ESNext", "DOM"],
+        "lib": ["ESNext", "DOM", "DOM.Iterable"],
         "noImplicitAny": false,
         "target": "ESNext",
         "module": "ESNext",

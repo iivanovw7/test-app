@@ -7,10 +7,10 @@ export default {
             },
         ],
         "order/properties-alphabetical-order": null,
+        "selector-pseudo-class-no-unknown": null,
         "no-descending-specificity": null,
         "selector-class-pattern": null,
         "max-nesting-depth": 2,
-        "selector-pseudo-class-no-unknown": null,
     },
     extends: [
         "stylelint-config-standard",
