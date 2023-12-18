@@ -15,34 +15,39 @@ const button = cva(
     {
         compoundVariants: [
             {
-                class: ["relative inline-flex items-center justify-center", "overflow-hidden p-0.5"],
+                class: ["relative inline-flex items-center justify-center", "p-0.5"],
                 variant: "gradient-outline",
                 size: "x-small",
             },
             {
-                class: ["relative inline-flex items-center justify-center", "overflow-hidden p-0.5"],
+                class: ["relative inline-flex items-center justify-center", "p-0.5"],
                 variant: "gradient-outline",
                 size: "small",
             },
             {
-                class: ["relative inline-flex items-center justify-center", "overflow-hidden p-0.5"],
+                class: ["relative inline-flex items-center justify-center", "p-0.5"],
                 variant: "gradient-outline",
                 size: "medium",
+            },
+            {
+                class: "px-2 py-1 text-xs",
+                variant: "fill",
+                size: "x-small",
             },
             {
                 class: "px-3 py-2 text-xs",
                 variant: "fill",
-                size: "x-small",
+                size: "small",
             },
             {
                 class: "px-3 py-2 text-sm",
                 variant: "fill",
-                size: "small",
+                size: "medium",
             },
             {
                 class: "px-3 py-2.5 text-sm",
                 variant: "fill",
-                size: "medium",
+                size: "large",
             },
             {
                 variant: "gradient-duonote",
@@ -75,12 +80,28 @@ const button = cva(
                 variant: "fill",
             },
             {
-                class: ["dark:text-brand-text-dark text-brand-text"],
                 variant: "transparent",
+                class: ["border-0"],
                 color: "tertiary",
             },
         ],
         variants: {
+            color: {
+                tertiary: [
+                    "border",
+                    "text-brand-text",
+                    "border-brand-border dark:border-brand-dark-border",
+                    "bg-brand-tertiary dark:bg-brand-dark-tertiary",
+                    "hover:bg-brand-hover-tertiary",
+                    "dark:hover:bg-brand-dark-hover-tertiary",
+                    "dark:text-brand-dark-text",
+                    "dark:hover:bg-brand-dark-hover",
+                ],
+                secondary: ["hover:brightness-125"],
+                primary: ["hover:brightness-125"],
+                success: [],
+                error: [],
+            },
             variant: {
                 "gradient-outline": [
                     "group",
@@ -93,23 +114,11 @@ const button = cva(
                 "gradient-duonote": ["text-brand-surface"],
                 transparent: [],
             },
-            color: {
-                tertiary: [
-                    "bg-brand-tertiary dark:bg-brand-dark-tertiary",
-                    "hover:bg-brand-hover-tertiary",
-                    "dark:hover:bg-brand-dark-hover-tertiary",
-                    "dark:text-brand-dark-text",
-                    "dark:hover:bg-brand-dark-hover",
-                ],
-                secondary: ["hover:brightness-125"],
-                primary: ["hover:brightness-125"],
-                success: [],
-                error: [],
-            },
             size: {
-                medium: ["px-5 py-2.5 text-sm"],
-                small: ["px-2 py-2 text-sm"],
-                "x-small": ["text-xs"],
+                large: ["px-5 py-2.5 text-sm"],
+                medium: ["px-2 py-2 text-sm"],
+                "x-small": ["p-1 text-xs"],
+                small: ["text-xs"],
             },
         },
         defaultVariants: {
@@ -184,6 +193,7 @@ const text = cva(["relative w-full"], {
             "x-small": [],
             medium: [],
             small: [],
+            large: [],
         },
     },
     defaultVariants: {

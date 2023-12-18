@@ -1,7 +1,6 @@
 # test-app
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 ![Vercel](https://vercel-badge-fsohe4js4-iivanovw7.vercel.app/api/iivanovw7/test-app)
 
 Astro project with qwik [integration](https://qwik.builder.io/docs/integrations/astro)
@@ -125,4 +124,7 @@ All commands are run from the root of the project, from a terminal:
 
 -   Signup ui and logic
 -   Password encryption
+-   Signup reCaptcha
 -   Replace `src/shared/components/forms` with [modular-forms](https://modularforms.dev), [blocker](https://github.com/fabian-hiller/modular-forms/issues/145)
+-   Add forms validation
+-   Add locales

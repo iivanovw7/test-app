@@ -29,11 +29,14 @@ export const apiRoutes: Record<string, Route> = {
     refresh: { path: "/api/auth/refresh", isPrivate: false },
     getMe: { path: "/api/users/get-me", isPrivate: false },
     logout: { path: "/api/auth/logout", isPrivate: false },
-    signin: { path: "/api/auth/signin", isPrivate: false },
+    signup: { path: "/api/auth/signup", isPrivate: false },
     login: { path: "/api/auth/login", isPrivate: false },
 };
 
+const collectPaths = pipe(values, pluck("path"));
 const collectPublicPaths = pipe(values, filter(propertyEq(false, "isPrivate")), pluck("path"));
+
+export const apiPaths = collectPaths(apiRoutes);
 
 export const publicPagePaths = collectPublicPaths(routes) as Route["path"][];
 export const publicApiPaths = collectPublicPaths(apiRoutes) as Route["path"][];

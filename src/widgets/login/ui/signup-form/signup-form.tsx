@@ -9,20 +9,24 @@ import { cx } from "cva";
 
 import { LoginContext } from "../../model";
 
-export type TLoginForm = {
+export type TSignupForm = {
     password: string;
+    lastName: string;
     email: string;
+    name: string;
 };
 
-export const LoginForm = component$(() => {
+export const SignupForm = component$(() => {
     let rootStore = useContext(RootContext);
     let loginStore = useContext(LoginContext);
     let errorText = useSignal("");
-    let [form, { Field, Form }] = useForm<TLoginForm>({
+    let [form, { Field, Form }] = useForm<TSignupForm>({
         loader: {
             value: {
                 password: "",
+                lastName: "",
                 email: "",
+                name: "",
             },
         },
     });
@@ -30,12 +34,14 @@ export const LoginForm = component$(() => {
     useTask$(({ track }) => {
         track(() => getValue(form, "email"));
         track(() => getValue(form, "password"));
+        track(() => getValue(form, "name"));
+        track(() => getValue(form, "lastName"));
 
         errorText.value = "";
     });
 
-    let handleSubmit = $<SubmitHandler<TLoginForm>>(async (values) => {
-        let response = await fetch(apiRoutes.login.path, { body: JSON.stringify(values), method: "POST" });
+    let handleSubmit = $<SubmitHandler<TSignupForm>>(async (values) => {
+        let response = await fetch(apiRoutes.signup.path, { body: JSON.stringify(values), method: "POST" });
         let result = await response.json();
 
         if (result.success) {
@@ -46,8 +52,8 @@ export const LoginForm = component$(() => {
         }
     });
 
-    let handleSignupClick = $(() => {
-        loginStore.type = "SIGNUP";
+    let handleSigninClick = $(() => {
+        loginStore.type = "SIGNIN";
     });
 
     return (
@@ -62,18 +68,50 @@ export const LoginForm = component$(() => {
             )}
             onSubmit$={handleSubmit}
         >
-            <h3 class="my-0 text-brand-text dark:text-brand-dark-text">Login</h3>
+            <h3 class="my-0 text-brand-text dark:text-brand-dark-text">Create account</h3>
             <div class="flex flex-row items-center justify-between">
                 <Button
-                    onClick$={handleSignupClick}
-                    text="Create account"
+                    onClick$={handleSigninClick}
                     color="tertiary"
                     variant="fill"
                     size="x-small"
+                    text="Login"
                     as="button"
                 />
                 <Link target="_self" text="Home" href="/" />
             </div>
+            <Field name="name">
+                {(field, properties) => (
+                    <Input
+                        {...properties}
+                        classes={{
+                            container: "mt-6",
+                        }}
+                        value={field.value}
+                        placeholder="name"
+                        id="signup-name"
+                        label="Name"
+                        type="text"
+                        required
+                    />
+                )}
+            </Field>
+            <Field name="lastName">
+                {(field, properties) => (
+                    <Input
+                        {...properties}
+                        classes={{
+                            container: "mt-6",
+                        }}
+                        placeholder="last name"
+                        id="signup-last-name"
+                        value={field.value}
+                        label="Last name"
+                        type="text"
+                        required
+                    />
+                )}
+            </Field>
             <Field name="email">
                 {(field, properties) => (
                     <Input
@@ -83,7 +121,7 @@ export const LoginForm = component$(() => {
                         }}
                         placeholder="name@flowbite.com"
                         value={field.value}
-                        id="login-email"
+                        id="signup-email"
                         label="Email"
                         type="email"
                         required
@@ -98,7 +136,7 @@ export const LoginForm = component$(() => {
                             container: "mt-6",
                         }}
                         placeholder="password"
-                        id="login-password"
+                        id="signup-password"
                         value={field.value}
                         label="Password"
                         type="password"

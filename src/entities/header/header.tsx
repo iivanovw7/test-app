@@ -128,7 +128,7 @@ export const Header = component$(() => {
                                 color="primary"
                                 variant="fill"
                                 text="Logout"
-                                size="small"
+                                size="medium"
                                 class="m-0"
                                 as="button"
                             />
@@ -138,8 +138,8 @@ export const Header = component$(() => {
                                 variant="gradient-outline"
                                 class="m-0 h-full w-full"
                                 href={routes.login.path}
-                                size="x-small"
                                 target="_self"
+                                size="small"
                                 text="Login"
                                 as="link"
                             />

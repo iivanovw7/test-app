@@ -35,6 +35,8 @@ export type QueryUser = Omit<QueryUserModel, "password" | "_id"> & {
     id: string;
 };
 
+export type UserSignupData = Omit<QueryUserModel, "role" | "_id">;
+
 export type LoginData = {
     password: string;
     email: string;
@@ -46,6 +48,7 @@ export const ErrorCode = {
     USER_NOT_FOUND: 4004,
     WRONG_PASSWORD: 4003,
     UNAUTHORIZED: 4001,
+    USER_EXISTS: 4005,
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];

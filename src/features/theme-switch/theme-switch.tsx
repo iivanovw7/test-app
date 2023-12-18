@@ -59,7 +59,7 @@ export const ThemeSwitch = component$<ThemeSwitchProperties>((properties) => {
             variant="transparent"
             color="tertiary"
             type="button"
-            size="small"
+            size="medium"
         >
             <LuMoon
                 class={`${DARK_CLASS} hidden w-4 outline-none`}

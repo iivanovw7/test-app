@@ -8,7 +8,7 @@ import { styles } from "./button.styles";
 export type BaseProperties = {
     variant?: "gradient-duonote" | "gradient-outline" | "transparent" | "fill";
     color?: "secondary" | "tertiary" | "primary" | "success" | "error";
-    size?: "x-small" | "medium" | "small";
+    size?: "x-small" | "medium" | "small" | "large";
     textClass?: string;
     class?: string;
     text?: string;

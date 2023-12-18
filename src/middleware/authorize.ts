@@ -1,9 +1,11 @@
 import { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_KEY, Result } from "@/shared/api";
-import { publicPaths, routes } from "@/shared/routes";
+import { publicPaths, apiPaths, routes } from "@/shared/routes";
 import { defineMiddleware } from "astro/middleware";
 import { HttpStatus } from "#/http";
 import { ErrorCode } from "#/api";
 import { jwtVerify } from "jose";
+
+const { API_URL } = import.meta.env;
 
 const VerifyResult = {
     UNAUTHORIZED: "UNAUTHORIZED",
@@ -28,8 +30,12 @@ const verifyAuth = async (accessToken?: MaybeValue<string>) => {
 };
 
 export const authorize = defineMiddleware(async (context, next) => {
-    let { pathname } = context.url;
+    let { pathname, origin } = context.url;
     let { headers } = context.request;
+
+    if (apiPaths.includes(pathname) && origin !== API_URL) {
+        return Response.redirect(new URL(routes.home.path, context.url));
+    }
 
     let accessToken = context.cookies.get(ACCESS_TOKEN_KEY)?.value || headers.get(ACCESS_TOKEN_KEY);
 

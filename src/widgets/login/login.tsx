@@ -1,15 +1,24 @@
 import type { ProvidersProperties } from "@/layouts/providers";
 
-import { component$ } from "@builder.io/qwik";
+import { useContextProvider, component$, useStore } from "@builder.io/qwik";
 import { PageLayout } from "@/layouts/page";
 import { cx } from "cva";
 
-import { LoginForm } from "./ui";
+import type { LoginState } from "./model";
+
+import { SignupForm, LoginForm } from "./ui";
+import { LoginContext } from "./model";
 
 export type LoginProperties = ProvidersProperties;
 
 export const Login = component$<LoginProperties>((properties) => {
     let { slug } = properties;
+
+    let loginStore = useStore<LoginState>({
+        type: "SIGNIN",
+    });
+
+    useContextProvider<LoginState>(LoginContext, loginStore);
 
     return (
         <PageLayout slug={slug}>
@@ -33,7 +42,8 @@ export const Login = component$<LoginProperties>((properties) => {
                                             "before:content-[''] before:h-6 before:block",
                                         )}
                                     >
-                                        <LoginForm />
+                                        {loginStore.type === "SIGNIN" && <LoginForm />}
+                                        {loginStore.type === "SIGNUP" && <SignupForm />}
                                     </div>
                                 </div>
                             </article>
