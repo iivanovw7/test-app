@@ -7,7 +7,7 @@ export const config = {
     },
     meta: {
         keywords: ["astro", "qwik", "javascript", "typescript"],
-        name: "Site name",
+        name: "Test app",
         url: "",
     },
 };

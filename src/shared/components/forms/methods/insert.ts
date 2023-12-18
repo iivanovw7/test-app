@@ -84,7 +84,7 @@ export const insert = <
 
             setTimeout(
                 () =>
-                    validateIfRequired(form, fieldArray, name, {
+                    validateIfRequired(form, fieldArray!, name, {
                         on: ["touched", "input"],
                     }),
                 250,

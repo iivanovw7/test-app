@@ -24,8 +24,6 @@ export const routes: Record<BasePathKey, Route> = {
     home: { isPrivate: false, path: home },
 };
 
-const collectPublicPaths = pipe(values, filter(propertyEq(false, "isPrivate")), pluck("path"));
-
 export const apiRoutes: Record<string, Route> = {
     userCount: { path: "/api/user-count", isPrivate: false },
     refresh: { path: "/api/auth/refresh", isPrivate: false },
@@ -35,7 +33,8 @@ export const apiRoutes: Record<string, Route> = {
     login: { path: "/api/auth/login", isPrivate: false },
 };
 
+const collectPublicPaths = pipe(values, filter(propertyEq(false, "isPrivate")), pluck("path"));
+
 export const publicPagePaths = collectPublicPaths(routes) as Route["path"][];
 export const publicApiPaths = collectPublicPaths(apiRoutes) as Route["path"][];
-
 export const publicPaths = concat(publicPagePaths, publicApiPaths);

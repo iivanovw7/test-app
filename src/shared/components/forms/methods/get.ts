@@ -125,7 +125,7 @@ export const getValue = <
         (!shouldDirty || field.dirty) &&
         (!shouldValid || !field.error)
     ) {
-        return field.value;
+        return field.value as Maybe<FieldPathValue<TFieldValues, TFieldName>>;
     }
 
     return undefined;

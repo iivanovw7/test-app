@@ -26,7 +26,7 @@ export const Providers = component$<ProvidersProperties>((properties) => {
     });
 
     let refreshToken = $(async () => {
-        let response = await fetch(apiRoutes.refresh.path, { method: "GET" });
+        let response = await fetch(apiRoutes.refresh.path);
         let result = await response.json();
 
         if (!result.success) {

@@ -7,13 +7,14 @@
         "dev": "astro dev",
         "start": "astro dev",
         "build": "astro build",
+        "build:node": "npx astro build ./ --node",
+        "preview": "npx astro preview --node",
         "clean": "rimraf node_modules dist",
         "lint": "eslint 'src/**/*.{ts,tsx,astro}'",
         "lint:fix": "pnpm run lint --fix",
         "stylelint": "stylelint 'src/**/*.{css,scss,astro}' --custom-formatter=node_modules/stylelint-formatter-pretty/index.js",
         "stylelint:fix": "pnpm stylelint --fix",
         "format": "prettier-eslint --write \"src/**/*.{js,jsx,ts,tsx}\"",
-        "preview": "astro preview",
         "preinstall": "npx only-allow pnpm",
         "pre-commit": "pnpm typecheck && pnpm lint && pnpm run stylelint && pnpm format",
         "prepare": "husky install",
@@ -31,6 +32,7 @@
         "url": "https://github.com/iivanovw7/test-app.git"
     },
     "dependencies": {
+        "@astrojs/node": "7.0.1",
         "@astrojs/tailwind": "5.0.3",
         "@astrojs/vercel": "6.0.1",
         "@builder.io/qwik": "1.2.19",
