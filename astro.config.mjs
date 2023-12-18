@@ -1,13 +1,20 @@
 import vercel from "@astrojs/vercel/serverless";
+import node from "@astrojs/node";
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import qwikdev from "@qwikdev/astro";
 import { resolve } from "node:path";
 
-const root = process.cwd();
+let root = process.cwd();
 
 /** Path resolver. */
-const pathResolve = (pathname) => resolve(root, ".", pathname);
+let pathResolve = (pathname) => resolve(root, ".", pathname);
+
+let adapter = vercel();
+
+if (process.argv[3] === "--node" || process.argv[4] === "--node") {
+    adapter = node({ mode: "standalone" });
+}
 
 export default defineConfig({
     vite: {
@@ -36,6 +43,6 @@ export default defineConfig({
         port: 3000,
     }),
     integrations: [tailwind(), qwikdev()],
-    adapter: vercel(),
+    adapter,
     output: "server",
 });

@@ -4,7 +4,7 @@
 
 @layer base {
     * {
-        scrollbar-color: rgba(136, 154, 201, 0.3) transparent;
+        scrollbar-color: rgb(136 154 201 / 30%) transparent;
         scrollbar-width: auto;
     }
 
@@ -19,7 +19,7 @@
     }
 
     *::-webkit-scrollbar-thumb {
-        background-color: rgba(136, 154, 201, 0.3);
+        background-color: rgb(136 154 201 / 30%);
         border-radius: calc(4px / 2);
     }
 

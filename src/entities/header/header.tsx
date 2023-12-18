@@ -69,6 +69,7 @@ export const Header = component$(() => {
                             "mt-4 flex flex-col rounded-lg border",
                             "items-start w-full",
                             "border-brand-outline p-4",
+                            "dark:border-brand-dark-outline",
                             "font-medium list-none",
                             "md:flex-row md:items-center",
                             "md:my-0 md:space-x-8",

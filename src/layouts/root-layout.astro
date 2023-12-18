@@ -6,7 +6,7 @@ import "./styles/global.css";
 
 const { description, title, tags, slug } = Astro.props;
 
-const htmlTitle = `${config.name} | ${title}`;
+const htmlTitle = `${config.meta.name} | ${title}`;
 const keywords = tags || config.meta.keywords;
 
 ---
@@ -17,7 +17,7 @@ const keywords = tags || config.meta.keywords;
         <meta charset='utf-8' />
         <title>{htmlTitle}</title>
         <link href={`${config.url}${slug}`} rel="canonical" />
-        <link type="image/x-icon" href="/favicon.ico" rel="icon" />
+        <link type="image/x-icon" href="/favicon.svg" rel="icon" />
         <meta name="application-name" content="Name" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content={description} name="description" />
