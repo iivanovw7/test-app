@@ -36,7 +36,7 @@ export const Header = component$(() => {
                     <ThemeSwitch />
                     <button
                         class={cx(
-                            "round-sm p-2",
+                            "roundp-2",
                             "inline-flex h-8 w-8 items-center",
                             "justify-center text-sm",
                             "hover:bg-brand-hover focus:outline-none",
@@ -96,7 +96,7 @@ export const Header = component$(() => {
                                             class={cx(
                                                 "transition-colors",
                                                 "no-underline",
-                                                "round-sm px-0 md:px-2",
+                                                "rounded px-0 md:px-2",
                                                 "focus:outline-none",
                                                 "dark:focus:ring-brand-dark-focus-ring",
                                                 "focus:ring-2 focus:ring-brand-focus-ring",
@@ -125,21 +125,23 @@ export const Header = component$(() => {
 
                                     window.location.replace(routes.home.path);
                                 }}
+                                classes={{ button: "m-0" }}
                                 color="primary"
                                 variant="fill"
                                 text="Logout"
-                                size="small"
-                                class="m-0"
+                                size="medium"
                                 as="button"
                             />
                         )}
                         {!profile && (
                             <Button
+                                classes={{
+                                    button: "m-0 h-full w-full",
+                                }}
                                 variant="gradient-outline"
-                                class="m-0 h-full w-full"
                                 href={routes.login.path}
-                                size="x-small"
                                 target="_self"
+                                size="small"
                                 text="Login"
                                 as="link"
                             />

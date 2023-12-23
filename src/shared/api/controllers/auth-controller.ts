@@ -5,6 +5,7 @@ class AuthController {
 
     public refresh = this.service.refresh;
     public logout = this.service.logout;
+    public signup = this.service.signup;
     public login = this.service.login;
 }
 

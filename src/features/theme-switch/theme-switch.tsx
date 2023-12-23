@@ -54,12 +54,12 @@ export const ThemeSwitch = component$<ThemeSwitchProperties>((properties) => {
 
     return (
         <Button
-            class={properties.class}
+            classes={{ button: properties.class }}
             onClick$={handleClick}
             variant="transparent"
             color="tertiary"
             type="button"
-            size="small"
+            size="medium"
         >
             <LuMoon
                 class={`${DARK_CLASS} hidden w-4 outline-none`}

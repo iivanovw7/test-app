@@ -7,15 +7,16 @@ export type TBasicApiListResult<Data> = TBasicApiResult<TBasicApiList<Data>>;
 
 export type TBasicApiResult<Data> = {
     data: Nullable<Data>;
-    success: boolean;
     message: string;
+    success: true;
 };
 
 export type TBasicApiError = {
-    success: boolean;
     message: string;
     code: ErrorCode;
-    error?: unknown;
+    success: false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any;
 };
 
 export type QueryUserCount = {
@@ -26,14 +27,23 @@ export type QueryUserModel = {
     firstName: string;
     lastName: string;
     password: string;
+    role: UserRole;
     email: string;
-    role: string;
     _id: string;
 };
 
 export type QueryUser = Omit<QueryUserModel, "password" | "_id"> & {
     id: string;
 };
+
+export type UserSignupData = Omit<QueryUserModel, "role" | "_id">;
+
+export const UserRole = {
+    ADMIN: "ADMIN",
+    USER: "USER",
+} as const;
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
 export type LoginData = {
     password: string;
@@ -46,6 +56,7 @@ export const ErrorCode = {
     USER_NOT_FOUND: 4004,
     WRONG_PASSWORD: 4003,
     UNAUTHORIZED: 4001,
+    USER_EXISTS: 4005,
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];

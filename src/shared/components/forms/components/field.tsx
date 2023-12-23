@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
     FieldPathValue,
     TransformField,
@@ -63,7 +64,7 @@ export const Field = <
     let field = getFieldStore(form, name)!;
 
     return (
-        <Lifecycle store={field} key={name} {...properties}>
+        <Lifecycle store={field} key={name} {...(properties as any)}>
             {children(field, {
                 onInput$: $((event: Event, element: FieldElement) => {
                     handleFieldEvent(

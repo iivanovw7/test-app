@@ -3,6 +3,7 @@ import type { AstroCookies } from "astro";
 
 import { HttpStatus } from "#/http";
 import { ErrorCode } from "#/api";
+import { SignJWT } from "jose";
 
 import { SECONDS_IN_MINUTE, SECONDS_IN_DAY } from "../utils";
 
@@ -13,11 +14,10 @@ export const resultSuccess = <T>(fields?: TSuccessFields<T>): TBasicApiResult<T>
     ...fields,
 });
 
-export const resultError = (fields?: TErrorFields) => ({
+export const resultError = (fields?: TErrorFields): TBasicApiError => ({
     code: ErrorCode.INTERNAL_SERVER_ERROR,
     message: "Server error",
     success: false,
-    data: null,
     ...fields,
 });
 
@@ -77,6 +77,38 @@ export const cleanTokens = (cookies: AstroCookies) => {
         httpOnly: true,
         secure: true,
         maxAge: 0,
+        path: "/",
+    });
+};
+
+export const issueRefreshToken = async (cookies: AstroCookies, email: string) => {
+    let refreshToken = await new SignJWT({ email })
+        .setProtectedHeader({ alg: "HS256" })
+        .setIssuedAt()
+        .setExpirationTime("1d")
+        .sign(REFRESH_TOKEN_SECRET);
+
+    cookies.set(REFRESH_TOKEN_KEY, refreshToken, {
+        maxAge: REFRESH_TOKEN_MAX_AGE,
+        sameSite: "none",
+        httpOnly: true,
+        secure: true,
+        path: "/",
+    });
+};
+
+export const issueAccessToken = async (cookies: AstroCookies, email: string) => {
+    let accessToken = await new SignJWT({ email })
+        .setProtectedHeader({ alg: "HS256" })
+        .setIssuedAt()
+        .setExpirationTime("20m")
+        .sign(ACCESS_TOKEN_SECRET);
+
+    cookies.set(ACCESS_TOKEN_KEY, accessToken, {
+        maxAge: ACCESS_TOKEN_MAX_AGE,
+        sameSite: "none",
+        httpOnly: true,
+        secure: true,
         path: "/",
     });
 };

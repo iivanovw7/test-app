@@ -12,6 +12,7 @@ export const zodFormQrl = <TFieldValues extends FieldValues>(
 ): QRL<ValidateForm<TFieldValues>> => {
     return $(async (values: PartialValues<TFieldValues>) => {
         let result = await getParsedZodSchema(schema, values);
+
         return result.success
             ? {}
             : // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,7 +23,7 @@ export const zodFormQrl = <TFieldValues extends FieldValues>(
                   }
                   return errors;
               }, {}) as FormErrors<TFieldValues>);
-    });
+    }) as QRL<ValidateForm<TFieldValues>>;
 };
 
 /**

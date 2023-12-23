@@ -42,7 +42,7 @@ export class UserService {
             let { password, _id, ...restUser } = user;
 
             return Result.successResponse({
-                data: { user: { id: _id, ...restUser } },
+                data: { id: _id, ...restUser },
             });
         } catch (error) {
             cleanTokens(cookies);
@@ -62,7 +62,7 @@ export class UserService {
             let count: number = await collection.countDocuments();
 
             return Result.successResponse({
-                data: { count },
+                data: count,
             });
         } catch (error) {
             return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
