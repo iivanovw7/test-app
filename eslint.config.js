@@ -12,6 +12,13 @@ export default defineFlatConfig([
     {
         rules: {
             ...tailwindcss.recommended,
+            "tailwindcss/no-custom-classname": [
+                "error",
+                {
+                    whitelist: ["brand\\-.*"],
+                    skipClassAttribute: true,
+                },
+            ],
             "unicorn/prevent-abbreviations": [
                 "error",
                 {

@@ -4,7 +4,7 @@ import { component$ } from "@builder.io/qwik";
 import { cx } from "cva";
 
 export type InputProperties = InputHTMLAttributes<HTMLInputElement> & {
-    classes: Partial<{
+    classes?: Partial<{
         container: string;
         label: string;
         input: string;
@@ -13,7 +13,7 @@ export type InputProperties = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export const Input = component$<InputProperties>((properties) => {
-    let { classes, label, id, ...restProperties } = properties;
+    let { classes = {}, label, id, ...restProperties } = properties;
 
     return (
         <div class={cx(classes.container)}>
@@ -22,8 +22,9 @@ export const Input = component$<InputProperties>((properties) => {
             </label>
             <input
                 class={cx(
+                    "rounded",
                     "text-brand-text dark:text-brand-dark-text",
-                    "block w-full round-sm",
+                    "block w-full round",
                     "border border-gray-400 p-2.5 text-sm",
                     "focus:border-gray-400",
                     "bg-stone-300 dark:bg-stone-800",

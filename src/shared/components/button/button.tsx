@@ -4,13 +4,19 @@ import { component$, Slot } from "@builder.io/qwik";
 import { cx } from "cva";
 
 import { styles } from "./button.styles";
+import { Loader } from "./ui/loader";
 
 export type BaseProperties = {
+    classes?: Partial<{
+        button: string;
+        loader: string;
+        text: string;
+    }>;
     variant?: "gradient-duonote" | "gradient-outline" | "transparent" | "fill";
     color?: "secondary" | "tertiary" | "primary" | "success" | "error";
     size?: "x-small" | "medium" | "small" | "large";
-    textClass?: string;
-    class?: string;
+    isLoading?: boolean;
+    disabled?: boolean;
     text?: string;
 };
 
@@ -28,24 +34,31 @@ export type ButtonProperties = ButtonAsButton | ButtonAsLink;
 
 export const Button = component$<ButtonProperties>((properties) => {
     let {
-        textClass: textClassName,
         text: textProperty,
         color = "primary",
         variant = "fill",
-        class: className,
         as = "button",
+        classes = {},
+        isLoading,
+        disabled,
         size,
         ...restProperties
     } = properties;
 
-    let combinedClassName = cx(styles.button({ variant, color, size }), className);
-    let buttonText = <span class={cx(styles.text({ variant, color, size }), textClassName)}>{textProperty}</span>;
+    let combinedClassName = cx(styles.button({ variant, color, size }), classes.button);
+    let buttonText = <span class={cx(styles.text({ variant, color, size }), classes.text)}>{textProperty}</span>;
+    let loader = (
+        <div class={cx(styles.loader({ variant, color, size }), styles.loader)}>
+            <Loader color="#E5E7EB" />
+        </div>
+    );
 
     if (as === "link") {
         let linkProperties = restProperties as ButtonAsLink;
 
         return (
-            <a class={combinedClassName} {...linkProperties}>
+            <a disabled={isLoading || disabled} class={combinedClassName} {...linkProperties}>
+                {isLoading && loader}
                 {buttonText}
                 <Slot />
             </a>
@@ -55,7 +68,8 @@ export const Button = component$<ButtonProperties>((properties) => {
     let buttonProperties = restProperties as ButtonAsButton;
 
     return (
-        <button class={combinedClassName} {...buttonProperties}>
+        <button disabled={isLoading || disabled} class={combinedClassName} {...buttonProperties}>
+            {isLoading && loader}
             {buttonText}
             <Slot />
         </button>

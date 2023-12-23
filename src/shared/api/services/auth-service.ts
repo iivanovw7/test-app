@@ -1,8 +1,8 @@
 import type { QueryUserModel } from "#/api";
 import type { APIRoute } from "astro";
 
+import { ErrorCode, UserRole } from "#/api";
 import { HttpStatus } from "#/http";
-import { ErrorCode } from "#/api";
 import { jwtVerify } from "jose";
 
 import {
@@ -25,7 +25,7 @@ export class AuthService {
 
             let user = await collection.findOne<QueryUserModel>(
                 { email: body.email },
-                { projection: { emailVerified: 0, _id: 0 } },
+                { projection: { emailVerified: 0 } },
             );
 
             if (user) {
@@ -39,6 +39,7 @@ export class AuthService {
                 firstName: body.firstName,
                 lastName: body.lastName,
                 password: body.password,
+                role: UserRole.USER,
                 email: body.email,
             });
 
@@ -51,7 +52,7 @@ export class AuthService {
                 let { password, _id, ...restUser } = newUser;
 
                 return Result.successResponse({
-                    data: { user: { id: _id, ...restUser } },
+                    data: { id: _id, ...restUser },
                 });
             }
 
@@ -76,7 +77,7 @@ export class AuthService {
 
             let user = await collection.findOne<QueryUserModel>(
                 { email: body.email },
-                { projection: { emailVerified: 0, _id: 0 } },
+                { projection: { emailVerified: 0 } },
             );
 
             if (!user) {
@@ -93,7 +94,7 @@ export class AuthService {
                 let { password, _id, ...restUser } = user;
 
                 return Result.successResponse({
-                    data: { user: { id: _id, ...restUser } },
+                    data: { id: _id, ...restUser },
                 });
             }
 

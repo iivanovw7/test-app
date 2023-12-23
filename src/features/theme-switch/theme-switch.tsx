@@ -54,7 +54,7 @@ export const ThemeSwitch = component$<ThemeSwitchProperties>((properties) => {
 
     return (
         <Button
-            class={properties.class}
+            classes={{ button: properties.class }}
             onClick$={handleClick}
             variant="transparent"
             color="tertiary"

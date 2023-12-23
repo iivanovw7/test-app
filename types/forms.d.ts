@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-duplicate-type-constituents */
 import type { QwikChangeEvent, QwikFocusEvent, NoSerialize, QRL } from "@builder.io/qwik";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

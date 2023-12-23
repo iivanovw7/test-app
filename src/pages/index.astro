@@ -21,5 +21,5 @@ const profileResult = await profileResponse.json();
 ---
 
 <MainLayout slug={routes.home.path} description="Website" title="Home">
-    <Home profile={profileResult?.data?.user} userCount={userCount?.data?.count} slug={routes.home.path} />
+    <Home profile={profileResult?.data} userCount={userCount?.data} slug={routes.home.path} />
 </MainLayout>

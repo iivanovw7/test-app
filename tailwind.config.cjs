@@ -11,6 +11,7 @@ module.exports = {
                         "hover-tertiary": colors.gray[800],
                         "focus-ring": colors.blue[800],
                         background: colors.stone[900],
+                        secondary: colors.violet[500],
                         primary: colors.blue[700],
                         outline: colors.gray[100],
                         border: colors.gray[600],
@@ -21,6 +22,7 @@ module.exports = {
                     "hover-tertiary": colors.gray[300],
                     "focus-ring": colors.blue[300],
                     background: colors.stone[200],
+                    secondary: colors.violet[700],
                     warning: colors.orange[500],
                     success: colors.green[500],
                     primary: colors.blue[600],
@@ -33,8 +35,8 @@ module.exports = {
                 },
             },
             spacing: {
-                footer: "100px",
-                header: "100px",
+                footer: "80px",
+                header: "80px",
             },
             fontFamily: {
                 sans: ["Inconsolata", "sans-serif"],

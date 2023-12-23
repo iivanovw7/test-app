@@ -14,11 +14,10 @@ export const resultSuccess = <T>(fields?: TSuccessFields<T>): TBasicApiResult<T>
     ...fields,
 });
 
-export const resultError = (fields?: TErrorFields) => ({
+export const resultError = (fields?: TErrorFields): TBasicApiError => ({
     code: ErrorCode.INTERNAL_SERVER_ERROR,
     message: "Server error",
     success: false,
-    data: null,
     ...fields,
 });
 

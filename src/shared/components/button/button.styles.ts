@@ -2,14 +2,14 @@ import { cva } from "cva";
 
 const button = cva(
     [
-        "block",
+        "relative block",
         "text-center",
         "font-medium text-brand-text",
         "outline-none focus:outline-none",
         "focus:ring-2",
         "focus:ring-brand-focus-ring",
         "dark:focus:ring-brand-dark-focus-ring",
-        "round-sm no-underline",
+        "rounded no-underline",
         "transition-all",
     ],
     {
@@ -110,8 +110,8 @@ const button = cva(
                     "bg-brand-background text-brand-text",
                     "dark:bg-brand-dark-background",
                 ],
-                fill: ["bg-brand-primary text-brand-text", "px-3 py-2"],
-                "gradient-duonote": ["text-brand-surface"],
+                fill: ["bg-brand-primary text-brand-text"],
+                "gradient-duonote": ["text-brand-text"],
                 transparent: [],
             },
             size: {
@@ -157,7 +157,7 @@ const text = cva(["relative w-full"], {
             class: [
                 "text-brand-text",
                 "dark:text-brand-dark-text",
-                "round-sm bg-brand-background",
+                "rounded bg-brand-background",
                 "dark:bg-brand-dark-background",
                 "px-5 py-2.5 text-sm group-hover:bg-opacity-0",
             ],
@@ -165,9 +165,9 @@ const text = cva(["relative w-full"], {
             size: "medium",
         },
         {
-            class: ["text-brand-surface"],
             color: "primary",
             variant: "fill",
+            class: [],
         },
         {
             class: ["text-md"],
@@ -203,7 +203,54 @@ const text = cva(["relative w-full"], {
     },
 });
 
+const loader = cva(["absolute left-0 top-0 z-10", "flex h-full w-full flex-col", "items-center justify-center"], {
+    variants: {
+        color: {
+            secondary: [],
+            tertiary: [],
+            primary: [],
+            success: [],
+            error: [],
+        },
+        variant: {
+            "gradient-outline": [],
+            "gradient-duonote": [],
+            transparent: [],
+            fill: [],
+        },
+        size: {
+            "x-small": [],
+            medium: [],
+            small: [],
+            large: [],
+        },
+    },
+    compoundVariants: [
+        {
+            class: ["bg-brand-primary"],
+            color: "primary",
+            variant: "fill",
+        },
+        {
+            class: "bg-brand-secondary",
+            color: "secondary",
+            variant: "fill",
+        },
+        {
+            class: "bg-brand-tertiary",
+            color: "tertiary",
+            variant: "fill",
+        },
+    ],
+    defaultVariants: {
+        color: "primary",
+        variant: "fill",
+        size: "medium",
+    },
+});
+
 export const styles = {
     button,
+    loader,
     text,
 };

@@ -1,18 +1,15 @@
 import type { SubmitHandler } from "@/shared/components/forms";
+import type { LoginData } from "#/api";
 
 import { component$, useContext, useSignal, useTask$, $ } from "@builder.io/qwik";
 import { getValue, useForm } from "@/shared/components/forms";
 import { Button, Input, Link } from "@/shared/components";
 import { RootContext } from "@/shared/context";
-import { apiRoutes } from "@/shared/routes";
 import { cx } from "cva";
 
-import { LoginContext } from "../../model";
+import { LoginContext, LoginType } from "../../model";
 
-export type TLoginForm = {
-    password: string;
-    email: string;
-};
+export type TLoginForm = LoginData;
 
 export const LoginForm = component$(() => {
     let rootStore = useContext(RootContext);
@@ -35,18 +32,16 @@ export const LoginForm = component$(() => {
     });
 
     let handleSubmit = $<SubmitHandler<TLoginForm>>(async (values) => {
-        let response = await fetch(apiRoutes.login.path, { body: JSON.stringify(values), method: "POST" });
-        let result = await response.json();
+        let profile = await loginStore.submit(LoginType.SIGNIN, values);
 
-        if (result.success) {
-            rootStore.profile = result.data;
+        if (profile) {
+            rootStore.profile = profile;
             window.location.replace("/");
-        } else {
-            errorText.value = result?.message;
         }
     });
 
     let handleSignupClick = $(() => {
+        loginStore.errorMessage = "";
         loginStore.type = "SIGNUP";
     });
 
@@ -70,6 +65,7 @@ export const LoginForm = component$(() => {
                     color="tertiary"
                     variant="fill"
                     size="x-small"
+                    type="button"
                     as="button"
                 />
                 <Link target="_self" text="Home" href="/" />
@@ -106,8 +102,15 @@ export const LoginForm = component$(() => {
                     />
                 )}
             </Field>
-            <Button textClass="font-bold" color="primary" variant="fill" type="submit" text="Submit" class="mt-6" />
-            <p class="min-h-[48px] text-brand-warning">{errorText.value}</p>
+            <Button
+                classes={{ text: "font-bold", button: "mt-6" }}
+                isLoading={loginStore.isLoading}
+                color="primary"
+                variant="fill"
+                type="submit"
+                text="Submit"
+            />
+            <p class="min-h-[48px] text-brand-warning">{loginStore.errorMessage}</p>
         </Form>
     );
 });

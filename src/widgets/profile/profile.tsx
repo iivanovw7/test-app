@@ -21,15 +21,18 @@ export const Profile = component$<ProfileProperties>((properties) => {
                             "lg:min-h-[calc(100vh-theme(spacing.footer)-theme(spacing.header))]",
                         )}
                     >
-                        <section class={cx("py-6 lg:py-10", "mx-auto px-0 py-0", "max-w-none xl:ml-0")}>
-                            <article class={cx("max-w-none")}>
-                                <strong class="text-sm text-blue-500">Profile page</strong>
-                                <h1 class="mb-1 text-3xl text-brand-text dark:text-brand-dark-text sm:text-5xl">
-                                    Test website
-                                </h1>
-                                <h2 class="mt-1 font-semibold text-brand-text dark:text-brand-dark-text">
-                                    Description
-                                </h2>
+                        <section class={cx("py-4 lg:py-8", "mx-auto px-0 py-0", "max-w-none xl:ml-0")}>
+                            <article class={cx("max-w-none flex flex-col gap-2")}>
+                                <strong class="text-sm text-brand-secondary dark:text-brand-dark-secondary">
+                                    Profile
+                                </strong>
+                                <hr class="my-1 h-px border-0 bg-gray-400 dark:bg-gray-700" />
+                                <span>
+                                    <strong class="text-brand-primary">{profile?.firstName}</strong>
+                                    <strong class="text-brand-primary">{profile?.lastName}</strong>
+                                </span>
+                                <p class="m-0">{profile?.email}</p>
+                                <p class="m-0">{profile?.role.toLowerCase()}</p>
                             </article>
                         </section>
                     </main>
