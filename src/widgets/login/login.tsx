@@ -34,9 +34,13 @@ export const Login = component$<LoginProperties>((properties) => {
                                         class={cx(
                                             "block my-0 mx-auto",
                                             "px-0 py-[5%]",
-                                            "max-w-[450px] min-h-[100vh]",
+                                            "min-h-[100vh]",
                                             "after:content-[''] after:h-6 after:block",
                                             "before:content-[''] before:h-6 before:block",
+                                            {
+                                                "md:py-0 md:before:h-12 max-w-[720px]": loginState.type === "SIGNUP",
+                                                "max-w-[450px]": loginState.type === "SIGNIN",
+                                            },
                                         )}
                                     >
                                         {loginState.type === "SIGNIN" && <LoginForm />}

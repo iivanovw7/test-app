@@ -1,7 +1,7 @@
 import type { SubmitHandler } from "@/shared/components/forms";
 import type { LoginData } from "#/api";
 
-import { component$, useContext, useSignal, useTask$, $ } from "@builder.io/qwik";
+import { component$, useContext, useTask$, $ } from "@builder.io/qwik";
 import { getValue, useForm } from "@/shared/components/forms";
 import { Button, Input, Link } from "@/shared/components";
 import { RootContext } from "@/shared/context";
@@ -14,7 +14,6 @@ export type TLoginForm = LoginData;
 export const LoginForm = component$(() => {
     let rootStore = useContext(RootContext);
     let loginStore = useContext(LoginContext);
-    let errorText = useSignal("");
     let [form, { Field, Form }] = useForm<TLoginForm>({
         loader: {
             value: {
@@ -28,7 +27,7 @@ export const LoginForm = component$(() => {
         track(() => getValue(form, "email"));
         track(() => getValue(form, "password"));
 
-        errorText.value = "";
+        loginStore.errorMessage = "";
     });
 
     let handleSubmit = $<SubmitHandler<TLoginForm>>(async (values) => {
@@ -48,7 +47,8 @@ export const LoginForm = component$(() => {
     return (
         <Form
             class={cx(
-                "flex flex-col justify-center",
+                "flex flex-col justify-start",
+                "md:justify-center",
                 "px-4 py-0 m-0",
                 "min-w-[100%] min-h-[360px]",
                 "md:mb-6 md:min-h-[660px]",
@@ -57,7 +57,7 @@ export const LoginForm = component$(() => {
             )}
             onSubmit$={handleSubmit}
         >
-            <h3 class="my-0 text-brand-text dark:text-brand-dark-text">Login</h3>
+            <h2 class="my-0 text-brand-text dark:text-brand-dark-text">Login</h2>
             <div class="flex flex-row items-center justify-between">
                 <Button
                     onClick$={handleSignupClick}
@@ -70,12 +70,13 @@ export const LoginForm = component$(() => {
                 />
                 <Link target="_self" text="Home" href="/" />
             </div>
+            <hr class="my-2 h-px border-0 bg-gray-400 dark:bg-gray-700" />
             <Field name="email">
                 {(field, properties) => (
                     <Input
                         {...properties}
                         classes={{
-                            container: "mt-6",
+                            container: "mt-2",
                         }}
                         placeholder="name@flowbite.com"
                         value={field.value}
@@ -91,7 +92,7 @@ export const LoginForm = component$(() => {
                     <Input
                         {...properties}
                         classes={{
-                            container: "mt-6",
+                            container: "mt-2",
                         }}
                         placeholder="password"
                         id="login-password"
@@ -110,7 +111,7 @@ export const LoginForm = component$(() => {
                 type="submit"
                 text="Submit"
             />
-            <p class="min-h-[48px] text-brand-warning">{loginStore.errorMessage}</p>
+            <p class="min-h-[48px] py-1 text-brand-warning">{loginStore.errorMessage}</p>
         </Form>
     );
 });

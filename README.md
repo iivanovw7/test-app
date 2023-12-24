@@ -122,7 +122,7 @@ All commands are run from the root of the project, from a terminal:
 
 ## TODO
 
--   Signup ui and logic
+-   ~Signup ui and logic~
 -   Password encryption
 -   Signup reCaptcha
 -   Replace `src/shared/components/forms` with [modular-forms](https://modularforms.dev), [blocker](https://github.com/fabian-hiller/modular-forms/issues/145)

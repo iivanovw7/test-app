@@ -15,7 +15,7 @@ export const Link = component$<LinkProperties>((properties) => {
     return (
         <a
             class={cx(
-                "px-2",
+                "px-2 rounded",
                 "font-medium",
                 "focus:outline-none",
                 "focus:ring-2",

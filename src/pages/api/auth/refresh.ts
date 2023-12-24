@@ -1,3 +1,3 @@
-import { AuthController } from "@/shared/api";
+import { AuthService } from "@/shared/api";
 
-export const GET = AuthController.refresh;
+export const GET = AuthService.refresh;
