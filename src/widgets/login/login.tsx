@@ -4,18 +4,30 @@ import { useContextProvider, component$ } from "@builder.io/qwik";
 import { PageLayout } from "@/layouts/page";
 import { cx } from "cva";
 
-import type { LoginState } from "./model";
+import type { SignupFormState, LoginFormState, LoginState } from "./model";
 
-import { useLoginState, LoginContext } from "./model";
+import {
+    useSignupFormState,
+    useLoginFormState,
+    SignupFormContext,
+    LoginFormContext,
+    useLoginState,
+    LoginContext,
+} from "./model";
 import { SignupForm, LoginForm } from "./ui";
 
 export type LoginProperties = Pick<ProvidersProperties, "slug">;
 
 export const Login = component$<LoginProperties>((properties) => {
     let { slug } = properties;
-    let loginState = useLoginState();
 
+    let loginState = useLoginState();
+    let loginFormState = useLoginFormState();
+    let signupFormState = useSignupFormState();
+
+    useContextProvider<LoginFormState>(LoginFormContext, loginFormState);
     useContextProvider<LoginState>(LoginContext, loginState);
+    useContextProvider<SignupFormState>(SignupFormContext, signupFormState);
 
     return (
         <PageLayout slug={slug}>
@@ -38,7 +50,8 @@ export const Login = component$<LoginProperties>((properties) => {
                                             "after:content-[''] after:h-6 after:block",
                                             "before:content-[''] before:h-6 before:block",
                                             {
-                                                "md:py-0 md:before:h-12 max-w-[720px]": loginState.type === "SIGNUP",
+                                                "md:py-0 md:before:h-2 md:after:h-2 max-w-[720px]":
+                                                    loginState.type === "SIGNUP",
                                                 "max-w-[450px]": loginState.type === "SIGNIN",
                                             },
                                         )}

@@ -3,7 +3,17 @@
 
 import type { ZodSchema } from "zod";
 
+import { CountryMap } from "./contry-map";
+
 export { ZodTransformer, ZodSchema, z } from "zod";
+
+export const PhoneValidatorPattern = {
+    [CountryMap.RUSSIA]: /^(\+?7|8)?9\d{9}$/,
+} as const satisfies Record<CountryMap, RegExp>;
+
+export const PostalCodeValidatorPattern = {
+    [CountryMap.RUSSIA]: /^\d{6}$/,
+} as const satisfies Record<CountryMap, RegExp>;
 
 export const validateField = <Value = any, Message = string>(
     value: Value,

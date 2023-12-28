@@ -33,7 +33,7 @@ export type QueryUserAddressModel = {
     postalCode: string;
     apartment: string;
     building: string;
-    country: string;
+    country: "Russia";
     street: string;
     city: string;
 };

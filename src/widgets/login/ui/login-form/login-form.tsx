@@ -1,37 +1,37 @@
-import type { SubmitHandler } from "@/shared/components/forms";
+import type { CurriedOnChange } from "@/shared/utils";
 import type { LoginData } from "#/api";
 
-import { component$, useContext, useTask$, $ } from "@builder.io/qwik";
-import { getValue, useForm } from "@/shared/components/forms";
+import { validateLoginDataField, validateLoginData, hasValues } from "@/shared/utils";
+import { useVisibleTask$, component$, useContext, $ } from "@builder.io/qwik";
 import { Button, Input, Link } from "@/shared/components";
 import { RootContext } from "@/shared/context";
 import { cx } from "cva";
 
-import { LoginContext, LoginType } from "../../model";
-
-export type TLoginForm = LoginData;
+import { LoginFormContext, LoginContext, LoginType } from "../../model";
 
 export const LoginForm = component$(() => {
     let rootStore = useContext(RootContext);
     let loginStore = useContext(LoginContext);
-    let [form, { Field, Form }] = useForm<TLoginForm>({
-        loader: {
-            value: {
-                password: "",
-                email: "",
-            },
-        },
-    });
+    let loginFormState = useContext(LoginFormContext);
 
-    useTask$(({ track }) => {
-        track(() => getValue(form, "email"));
-        track(() => getValue(form, "password"));
+    useVisibleTask$(({ track }) => {
+        track(() => loginFormState.form.email);
+        track(() => loginFormState.form.password);
 
         loginStore.errorMessage = "";
     });
 
-    let handleSubmit = $<SubmitHandler<TLoginForm>>(async (values) => {
-        let profile = await loginStore.submit(LoginType.SIGNIN, values);
+    let handleSubmit = $(async () => {
+        let validation = validateLoginData(loginFormState.form);
+
+        loginFormState.setValidationEnabled(true);
+        loginFormState.setValidation(validation);
+
+        if (hasValues(validation)) {
+            return;
+        }
+
+        let profile = await loginStore.submit(LoginType.SIGNIN, loginFormState.form);
 
         if (profile) {
             rootStore.profile = profile;
@@ -39,13 +39,26 @@ export const LoginForm = component$(() => {
         }
     });
 
+    let handleInput: CurriedOnChange<keyof LoginData> = (key) => {
+        return $((eventData) => {
+            let { value } = eventData.target;
+
+            loginFormState.setFormField(key, value);
+
+            if (loginFormState.validationEnabled) {
+                loginFormState.setValidationVield(key, validateLoginDataField(key, value));
+            }
+        });
+    };
+
     let handleSignupClick = $(() => {
+        loginFormState.resetValidation();
         loginStore.errorMessage = "";
         loginStore.type = "SIGNUP";
     });
 
     return (
-        <Form
+        <form
             class={cx(
                 "flex flex-col justify-start",
                 "md:justify-center",
@@ -56,6 +69,9 @@ export const LoginForm = component$(() => {
                 "md:px-6 md:py-6",
             )}
             onSubmit$={handleSubmit}
+            preventdefault:submit
+            method="post"
+            noValidate
         >
             <h2 class="my-0 text-brand-text dark:text-brand-dark-text">Login</h2>
             <div class="flex flex-row items-center justify-between">
@@ -70,41 +86,29 @@ export const LoginForm = component$(() => {
                 />
                 <Link target="_self" text="Home" href="/" />
             </div>
-            <hr class="my-2 h-px border-0 bg-gray-400 dark:bg-gray-700" />
-            <Field name="email">
-                {(field, properties) => (
-                    <Input
-                        {...properties}
-                        classes={{
-                            container: "mt-2",
-                        }}
-                        placeholder="name@flowbite.com"
-                        value={field.value}
-                        id="login-email"
-                        label="Email"
-                        type="email"
-                        required
-                    />
-                )}
-            </Field>
-            <Field name="password">
-                {(field, properties) => (
-                    <Input
-                        {...properties}
-                        classes={{
-                            container: "mt-2",
-                        }}
-                        placeholder="password"
-                        id="login-password"
-                        value={field.value}
-                        label="Password"
-                        type="password"
-                        required
-                    />
-                )}
-            </Field>
+            <hr class="mb-6 mt-2 h-px border-0 bg-gray-400 dark:bg-gray-700" />
+            <Input
+                errorText={loginFormState.validation.email?.toString()}
+                value={loginFormState.form.email}
+                placeholder="name@flowbite.com"
+                onInput$={handleInput("email")}
+                id="login-email"
+                label="Email"
+                type="email"
+                required
+            />
+            <Input
+                errorText={loginFormState.validation.password?.toString()}
+                value={loginFormState.form.password}
+                onInput$={handleInput("password")}
+                placeholder="password"
+                id="login-password"
+                label="Password"
+                type="password"
+                required
+            />
             <Button
-                classes={{ text: "font-bold", button: "mt-6" }}
+                classes={{ text: "font-bold", button: "mt-2" }}
                 isLoading={loginStore.isLoading}
                 color="primary"
                 variant="fill"
@@ -112,6 +116,6 @@ export const LoginForm = component$(() => {
                 text="Submit"
             />
             <p class="min-h-[48px] py-1 text-brand-warning">{loginStore.errorMessage}</p>
-        </Form>
+        </form>
     );
 });

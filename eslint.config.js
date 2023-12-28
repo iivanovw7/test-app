@@ -2,16 +2,19 @@ import eslintConfig from "@azat-io/eslint-config-typescript";
 import eslintConfigAstro from "@azat-io/eslint-config-astro";
 import typescriptEnum from "eslint-plugin-typescript-enum";
 import { defineFlatConfig } from "eslint-define-config";
-import tailwindcss from "eslint-plugin-tailwindcss";
+import perfectionistAlphabetical from "eslint-plugin-perfectionist/configs/recommended-alphabetical";
 import jsdoc from "eslint-plugin-jsdoc";
-import qwik from "eslint-plugin-qwik";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const compat = new FlatCompat();
 
 export default defineFlatConfig([
+    perfectionistAlphabetical,
     ...eslintConfig,
     ...eslintConfigAstro,
-    {
+    ...compat.config({
+        extends: ["plugin:tailwindcss/recommended"],
         rules: {
-            ...tailwindcss.recommended,
             "tailwindcss/no-custom-classname": [
                 "error",
                 {
@@ -31,6 +34,10 @@ export default defineFlatConfig([
                     officialSorting: true,
                 },
             ],
+        },
+    }),
+    {
+        rules: {
             "unicorn/filename-case": [
                 "error",
                 {
@@ -38,9 +45,6 @@ export default defineFlatConfig([
                 },
             ],
             "arrow-body-style": "off",
-        },
-        plugins: {
-            tailwindcss,
         },
     },
     {
@@ -51,12 +55,10 @@ export default defineFlatConfig([
             "jsdoc/require-description": 2,
             "jsdoc/require-returns": 2,
             "jsdoc/require-jsdoc": 2,
-            ...qwik.recommended,
         },
         plugins: {
             "typescript-enum": typescriptEnum,
             jsdoc,
-            qwik,
         },
         files: ["**/*.ts", "**/*.tsx"],
     },

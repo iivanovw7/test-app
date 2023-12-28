@@ -5,5 +5,6 @@ export * from "./list";
 export * from "./make-api-request";
 export * from "./validate";
 export * from "./object";
+export * from "./event";
 
 export * from "ramda";
