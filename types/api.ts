@@ -23,7 +23,24 @@ export type QueryUserCount = {
     count: number;
 };
 
+export type QueryUserContactsModel = {
+    telegram?: string;
+    whatsapp?: string;
+    phone: string;
+};
+
+export type QueryUserAddressModel = {
+    postalCode: string;
+    apartment: string;
+    building: string;
+    country: "Russia";
+    street: string;
+    city: string;
+};
+
 export type QueryUserModel = {
+    contacts: QueryUserContactsModel;
+    address: QueryUserAddressModel;
     firstName: string;
     lastName: string;
     password: string;
@@ -36,7 +53,9 @@ export type QueryUser = Omit<QueryUserModel, "password" | "_id"> & {
     id: string;
 };
 
-export type UserSignupData = Omit<QueryUserModel, "role" | "_id">;
+export type UserSignupData = Omit<QueryUserModel, "contacts" | "address" | "role" | "_id"> &
+    Pick<QueryUserAddressModel, "postalCode" | "apartment" | "building" | "country" | "street" | "city"> &
+    Pick<QueryUserContactsModel, "telegram" | "whatsapp" | "phone">;
 
 export const UserRole = {
     ADMIN: "ADMIN",
@@ -53,6 +72,7 @@ export type LoginData = {
 export const ErrorCode = {
     INVALID_REFRESH_TOKEN: 4002,
     INTERNAL_SERVER_ERROR: 5000,
+    VALIDATION_ERROR: 4006,
     USER_NOT_FOUND: 4004,
     WRONG_PASSWORD: 4003,
     UNAUTHORIZED: 4001,

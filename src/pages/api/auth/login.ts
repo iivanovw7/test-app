@@ -1,3 +1,3 @@
-import { AuthController } from "@/shared/api";
+import { AuthService } from "@/shared/api";
 
-export const POST = AuthController.login;
+export const POST = AuthService.login;

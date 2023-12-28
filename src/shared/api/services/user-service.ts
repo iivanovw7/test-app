@@ -1,5 +1,4 @@
 import type { TBasicApiResult, QueryUserCount, QueryUserModel } from "#/api";
-import type { APIRoute } from "astro";
 
 import { HttpStatus } from "#/http";
 import { ErrorCode } from "#/api";
@@ -10,8 +9,8 @@ import clientPromise from "../mongodb";
 
 export type TQueryUserCountResult = TBasicApiResult<QueryUserCount>;
 
-export class UserService {
-    public getMe: APIRoute = async ({ request, cookies }) => {
+export const UserService = {
+    getMe: async ({ request, cookies }) => {
         let accessToken = request.headers.get(ACCESS_TOKEN_KEY) || cookies.get(ACCESS_TOKEN_KEY)?.value;
 
         if (!accessToken) {
@@ -53,9 +52,8 @@ export class UserService {
                 error,
             });
         }
-    };
-
-    public count: APIRoute = async () => {
+    },
+    count: async () => {
         try {
             let client = await clientPromise;
             let collection = client.db(DB_NAME).collection("users");
@@ -71,5 +69,5 @@ export class UserService {
                 error,
             });
         }
-    };
-}
+    },
+};

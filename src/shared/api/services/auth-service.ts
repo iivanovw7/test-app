@@ -1,5 +1,4 @@
 import type { QueryUserModel } from "#/api";
-import type { APIRoute } from "astro";
 
 import { ErrorCode, UserRole } from "#/api";
 import { HttpStatus } from "#/http";
@@ -16,8 +15,8 @@ import {
 } from "../utils";
 import clientPromise from "../mongodb";
 
-export class AuthService {
-    public signup: APIRoute = async ({ request, cookies }) => {
+export const AuthService = {
+    signup: async ({ request, cookies }) => {
         try {
             let body = await request.json();
             let client = await clientPromise;
@@ -36,6 +35,19 @@ export class AuthService {
             }
 
             let { insertedId } = await collection.insertOne({
+                address: {
+                    postalCode: body.postalCode,
+                    apartment: body.apartment,
+                    building: body.building,
+                    country: body.country,
+                    street: body.street,
+                    city: body.city,
+                },
+                contacts: {
+                    phone: body.phone,
+                    telegram: "",
+                    whatsapp: "",
+                },
                 firstName: body.firstName,
                 lastName: body.lastName,
                 password: body.password,
@@ -67,9 +79,8 @@ export class AuthService {
                 error,
             });
         }
-    };
-
-    public login: APIRoute = async ({ request, cookies }) => {
+    },
+    login: async ({ request, cookies }) => {
         try {
             let body = await request.json();
             let client = await clientPromise;
@@ -109,9 +120,8 @@ export class AuthService {
                 error,
             });
         }
-    };
-
-    public refresh: APIRoute = async ({ request, cookies }) => {
+    },
+    refresh: async ({ request, cookies }) => {
         let refreshToken = cookies.get(REFRESH_TOKEN_KEY)?.value || request.headers.get(REFRESH_TOKEN_KEY);
 
         if (!refreshToken) {
@@ -136,11 +146,10 @@ export class AuthService {
                 error,
             });
         }
-    };
-
-    public logout: APIRoute = async ({ cookies }) => {
+    },
+    logout: async ({ cookies }) => {
         cleanTokens(cookies);
 
         return Result.successResponse({ message: "Logged out" });
-    };
-}
+    },
+};

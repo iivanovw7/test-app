@@ -1,3 +1,3 @@
-import { UserController } from "@/shared/api";
+import { UserService } from "@/shared/api";
 
-export const GET = UserController.count;
+export const GET = UserService.count;

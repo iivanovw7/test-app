@@ -1,19 +1,19 @@
-import type { InputHTMLAttributes } from "@builder.io/qwik";
+import type { TextareaHTMLAttributes } from "@builder.io/qwik";
 
 import { useVisibleTask$, component$, useSignal } from "@builder.io/qwik";
 import { cx } from "cva";
 
-export type InputProperties = InputHTMLAttributes<HTMLInputElement> & {
+export type TextareaProperties = TextareaHTMLAttributes<HTMLTextAreaElement> & {
     classes?: Partial<{
         container: string;
+        textarea: string;
         label: string;
-        input: string;
     }>;
     errorText?: Nullable<string>;
     label?: string;
 };
 
-export const Input = component$<InputProperties>((properties) => {
+export const Textarea = component$<TextareaProperties>((properties) => {
     let { classes = {}, errorText, label, value, id, ...restProperties } = properties;
 
     let hasError = useSignal(!!errorText?.length);
@@ -29,7 +29,7 @@ export const Input = component$<InputProperties>((properties) => {
             <label class={cx("block text-sm font-medium", classes.label)} for={id}>
                 {label}
             </label>
-            <input
+            <textarea
                 class={cx(
                     "rounded",
                     "text-brand-text dark:text-brand-dark-text",
@@ -46,7 +46,7 @@ export const Input = component$<InputProperties>((properties) => {
                         "focus:ring-brand-error dark:focus:ring-brand-error": !!errorText?.length,
                         "border-brand-error dark:border-brand-error": !!errorText?.length,
                     },
-                    classes.input,
+                    classes.textarea,
                 )}
                 value={value}
                 id={id}
