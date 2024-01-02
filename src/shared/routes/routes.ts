@@ -1,13 +1,15 @@
 import { propEq as propertyEq, filter, values, concat, pluck, pipe } from "../utils";
 
 export const BasePath = {
+    profileContacts: "/profile/contacts",
+    profileSecurity: "/profile/security",
     profile: "/profile",
     notFound: "/404",
     login: "/login",
     home: "/",
 } as const;
 
-const { notFound, profile, login, home } = BasePath;
+const { profileContacts, profileSecurity, notFound, profile, login, home } = BasePath;
 
 export type BasePathKey = keyof typeof BasePath;
 export type BasePath = (typeof BasePath)[BasePathKey];
@@ -18,6 +20,8 @@ export type Route = {
 };
 
 export const routes: Record<BasePathKey, Route> = {
+    profileContacts: { path: profileContacts, isPrivate: true },
+    profileSecurity: { path: profileSecurity, isPrivate: true },
     notFound: { isPrivate: false, path: notFound },
     profile: { isPrivate: true, path: profile },
     login: { isPrivate: false, path: login },
@@ -25,6 +29,7 @@ export const routes: Record<BasePathKey, Route> = {
 };
 
 export const apiRoutes: Record<string, Route> = {
+    updateMe: { path: "/api/users/update-me", isPrivate: true },
     userCount: { path: "/api/user-count", isPrivate: false },
     refresh: { path: "/api/auth/refresh", isPrivate: false },
     getMe: { path: "/api/users/get-me", isPrivate: false },

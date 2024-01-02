@@ -96,7 +96,7 @@ export const Header = component$(() => {
                                             class={cx(
                                                 "transition-colors",
                                                 "no-underline",
-                                                "rounded px-0 md:px-2",
+                                                "px-2 rounded",
                                                 "focus:outline-none",
                                                 "dark:focus:ring-brand-dark-focus-ring",
                                                 "focus:ring-2 focus:ring-brand-focus-ring",

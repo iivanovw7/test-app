@@ -70,6 +70,12 @@ const button = cva(
                 variant: "fill",
             },
             {
+                class: ["opacity-50"],
+                color: "primary",
+                variant: "fill",
+                disabled: true,
+            },
+            {
                 class: "bg-brand-secondary",
                 color: "secondary",
                 variant: "fill",
@@ -120,10 +126,15 @@ const button = cva(
                 medium: ["p-2 text-sm"],
                 small: ["text-xs"],
             },
+            disabled: {
+                true: ["pointer-events-none"],
+                false: [],
+            },
         },
         defaultVariants: {
             color: "primary",
             variant: "fill",
+            disabled: false,
             size: "medium",
         },
     },
@@ -195,59 +206,72 @@ const text = cva(["relative w-full"], {
             small: [],
             large: [],
         },
+        disabled: {
+            false: [],
+            true: [],
+        },
     },
     defaultVariants: {
         color: "primary",
         variant: "fill",
+        disabled: false,
         size: "medium",
     },
 });
 
-const loader = cva(["absolute left-0 top-0 z-10", "flex h-full w-full flex-col", "items-center justify-center"], {
-    variants: {
-        color: {
-            secondary: [],
-            tertiary: [],
-            primary: [],
-            success: [],
-            error: [],
+const loader = cva(
+    ["absolute left-0 top-0 z-10 rounded", "flex h-full w-full flex-col", "items-center justify-center"],
+    {
+        variants: {
+            color: {
+                secondary: [],
+                tertiary: [],
+                primary: [],
+                success: [],
+                error: [],
+            },
+            variant: {
+                "gradient-outline": [],
+                "gradient-duonote": [],
+                transparent: [],
+                fill: [],
+            },
+            size: {
+                "x-small": [],
+                medium: [],
+                small: [],
+                large: [],
+            },
+            disabled: {
+                false: [],
+                true: [],
+            },
         },
-        variant: {
-            "gradient-outline": [],
-            "gradient-duonote": [],
-            transparent: [],
-            fill: [],
-        },
-        size: {
-            "x-small": [],
-            medium: [],
-            small: [],
-            large: [],
-        },
-    },
-    compoundVariants: [
-        {
-            class: ["bg-brand-primary"],
+        compoundVariants: [
+            {
+                class: ["bg-brand-primary"],
+                color: "primary",
+                variant: "fill",
+            },
+            {
+                class: "bg-brand-secondary",
+                color: "secondary",
+                variant: "fill",
+            },
+            {
+                class: "bg-brand-tertiary",
+                color: "tertiary",
+                variant: "fill",
+            },
+        ],
+        defaultVariants: {
             color: "primary",
             variant: "fill",
+            disabled: false,
+            size: "medium",
         },
-        {
-            class: "bg-brand-secondary",
-            color: "secondary",
-            variant: "fill",
-        },
-        {
-            class: "bg-brand-tertiary",
-            color: "tertiary",
-            variant: "fill",
-        },
-    ],
-    defaultVariants: {
-        color: "primary",
-        variant: "fill",
-        size: "medium",
     },
-});
+);
 
 export const styles = {
     button,

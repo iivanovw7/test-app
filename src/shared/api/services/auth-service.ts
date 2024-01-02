@@ -3,6 +3,7 @@ import type { QueryUserModel } from "#/api";
 import { ErrorCode, UserRole } from "#/api";
 import { HttpStatus } from "#/http";
 import { jwtVerify } from "jose";
+import dayjs from "dayjs";
 
 import {
     REFRESH_TOKEN_SECRET,
@@ -48,6 +49,8 @@ export const AuthService = {
                     telegram: "",
                     whatsapp: "",
                 },
+                createdAt: dayjs().valueOf(),
+                updatedAt: dayjs().valueOf(),
                 firstName: body.firstName,
                 lastName: body.lastName,
                 password: body.password,

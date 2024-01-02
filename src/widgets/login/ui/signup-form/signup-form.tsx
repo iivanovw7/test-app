@@ -15,46 +15,45 @@ const INITIAL_PHONE_PREFIX = PhonePrefix[CountryMap.RUSSIA];
 
 export const SignupForm = component$(() => {
     let rootStore = useContext(RootContext);
-    let loginStore = useContext(LoginContext);
-    let signupFormStore = useContext(SignupFormContext);
+    let state = useContext(LoginContext);
+    let formState = useContext(SignupFormContext);
 
     let phonePrefix = useSignal<string>(INITIAL_PHONE_PREFIX);
 
     useTask$(({ track }) => {
-        track(() => signupFormStore.form.email);
-        track(() => signupFormStore.form.password);
-        track(() => signupFormStore.form.firstName);
-        track(() => signupFormStore.form.lastName);
-        track(() => signupFormStore.form.phone);
-        track(() => signupFormStore.form.street);
-        track(() => signupFormStore.form.apartment);
-        track(() => signupFormStore.form.building);
-        track(() => signupFormStore.form.street);
-        track(() => signupFormStore.form.city);
-        track(() => signupFormStore.form.country);
+        track(() => formState.form.password);
+        track(() => formState.form.firstName);
+        track(() => formState.form.lastName);
+        track(() => formState.form.phone);
+        track(() => formState.form.street);
+        track(() => formState.form.apartment);
+        track(() => formState.form.building);
+        track(() => formState.form.street);
+        track(() => formState.form.city);
+        track(() => formState.form.country);
 
-        loginStore.errorMessage = "";
+        state.errorMessage = "";
     });
 
     useTask$(({ track }) => {
-        track(() => signupFormStore.form.country);
+        track(() => formState.form.country);
 
-        let { country } = signupFormStore.form;
+        let { country } = formState.form;
 
         phonePrefix.value = PhonePrefix[country];
     });
 
     let handleSubmit = $(async () => {
-        let validation = validateSignupData(signupFormStore.form);
+        let validation = validateSignupData(formState.form);
 
-        signupFormStore.setValidationEnabled(true);
-        signupFormStore.setValidation(validation);
+        formState.setValidationEnabled(true);
+        formState.setValidation(validation);
 
         if (hasValues(validation)) {
             return;
         }
 
-        let profile = await loginStore.submit(LoginType.SIGNUP, signupFormStore.form);
+        let profile = await state.submit(LoginType.SIGNUP, formState.form);
 
         if (profile) {
             rootStore.profile = profile;
@@ -66,21 +65,18 @@ export const SignupForm = component$(() => {
         return $(({ target: { value } }) => {
             let formatted = key === "phone" ? toPhoneNumber(value) : value;
 
-            signupFormStore.setFormField(key, formatted);
+            formState.setFormField(key, formatted);
 
-            if (signupFormStore.validationEnabled) {
-                signupFormStore.setValidationVield(
-                    key,
-                    validateSignupDataField(key, formatted, signupFormStore.form.country),
-                );
+            if (formState.validationEnabled) {
+                formState.setValidationVield(key, validateSignupDataField(key, formatted, formState.form.country));
             }
         });
     };
 
     let handleSigninClick = $(() => {
-        signupFormStore.resetValidation();
-        loginStore.errorMessage = "";
-        loginStore.type = "SIGNIN";
+        formState.resetValidation();
+        state.errorMessage = "";
+        state.type = "SIGNIN";
     });
 
     return (
@@ -117,9 +113,9 @@ export const SignupForm = component$(() => {
                 <div class="flex w-full flex-col">
                     <h4 class="mt-3 text-brand-text dark:text-brand-dark-text">Profile</h4>
                     <Input
-                        errorText={signupFormStore.validation.firstName?.toString()}
-                        value={signupFormStore.form.firstName}
+                        errorText={formState.validation.firstName?.toString()}
                         onInput$={handleInput("firstName")}
+                        value={formState.form.firstName}
                         placeholder="name"
                         id="signup-name"
                         label="Name"
@@ -127,9 +123,9 @@ export const SignupForm = component$(() => {
                         required
                     />
                     <Input
-                        errorText={signupFormStore.validation.lastName?.toString()}
-                        value={signupFormStore.form.lastName}
+                        errorText={formState.validation.lastName?.toString()}
                         onInput$={handleInput("lastName")}
+                        value={formState.form.lastName}
                         placeholder="last name"
                         id="signup-last-name"
                         label="Last name"
@@ -137,19 +133,19 @@ export const SignupForm = component$(() => {
                         required
                     />
                     <Input
-                        errorText={signupFormStore.validation.email?.toString()}
-                        value={signupFormStore.form.email}
+                        errorText={formState.validation.email?.toString()}
                         placeholder="name@flowbite.com"
                         onInput$={handleInput("email")}
+                        value={formState.form.email}
                         id="signup-email"
                         label="Email"
                         type="email"
                         required
                     />
                     <InputPhone
-                        errorText={signupFormStore.validation.phone?.toString()}
-                        value={signupFormStore.form.phone}
+                        errorText={formState.validation.phone?.toString()}
                         onInput$={handleInput("phone")}
+                        value={formState.form.phone}
                         prefix={phonePrefix.value}
                         placeholder="9998885566"
                         id="signup-phone"
@@ -158,9 +154,9 @@ export const SignupForm = component$(() => {
                         required
                     />
                     <Input
-                        errorText={signupFormStore.validation.password?.toString()}
-                        value={signupFormStore.form.password}
+                        errorText={formState.validation.password?.toString()}
                         onInput$={handleInput("password")}
+                        value={formState.form.password}
                         placeholder="password"
                         id="signup-password"
                         label="Password"
@@ -174,7 +170,7 @@ export const SignupForm = component$(() => {
                         options={Object.values(CountryMap).map((country) => ({
                             value: country,
                         }))}
-                        value={signupFormStore.form.country}
+                        value={formState.form.country}
                         placeholder="country"
                         id="signup-country"
                         label="Country"
@@ -182,9 +178,9 @@ export const SignupForm = component$(() => {
                         disabled
                     />
                     <Input
-                        errorText={signupFormStore.validation.city?.toString()}
-                        value={signupFormStore.form.city}
+                        errorText={formState.validation.city?.toString()}
                         onInput$={handleInput("city")}
+                        value={formState.form.city}
                         placeholder="city"
                         id="signup-city"
                         label="City"
@@ -192,9 +188,9 @@ export const SignupForm = component$(() => {
                         required
                     />
                     <Input
-                        errorText={signupFormStore.validation.building?.toString()}
-                        value={signupFormStore.form.building}
+                        errorText={formState.validation.building?.toString()}
                         onInput$={handleInput("building")}
+                        value={formState.form.building}
                         placeholder="building"
                         id="signup-building"
                         label="Building"
@@ -202,9 +198,9 @@ export const SignupForm = component$(() => {
                         required
                     />
                     <Input
-                        errorText={signupFormStore.validation.apartment?.toString()}
-                        value={signupFormStore.form.apartment}
+                        errorText={formState.validation.apartment?.toString()}
                         onInput$={handleInput("apartment")}
+                        value={formState.form.apartment}
                         placeholder="apartment"
                         id="signup-apartment"
                         label="Apartment"
@@ -212,9 +208,9 @@ export const SignupForm = component$(() => {
                         required
                     />
                     <Input
-                        errorText={signupFormStore.validation.postalCode?.toString()}
-                        value={signupFormStore.form.postalCode}
+                        errorText={formState.validation.postalCode?.toString()}
                         onInput$={handleInput("postalCode")}
+                        value={formState.form.postalCode}
                         placeholder="postalCode"
                         id="signup-postal-code"
                         label="Postal code"
@@ -222,9 +218,9 @@ export const SignupForm = component$(() => {
                         required
                     />
                     <Textarea
-                        errorText={signupFormStore.validation.street?.toString()}
-                        value={signupFormStore.form.street}
+                        errorText={formState.validation.street?.toString()}
                         onInput$={handleInput("street")}
+                        value={formState.form.street}
                         placeholder="street"
                         id="signup-street"
                         label="Street"
@@ -237,13 +233,13 @@ export const SignupForm = component$(() => {
                     button: cx("mt-2 w-full", "md:ml-auto md:mr-0 md:w-[calc(50%-0.75rem)]"),
                     text: "font-bold",
                 }}
-                isLoading={loginStore.isLoading}
+                isLoading={state.isLoading}
                 color="primary"
                 variant="fill"
                 type="submit"
                 text="Submit"
             />
-            <p class="min-h-[48px] py-1 text-right text-brand-warning">{loginStore.errorMessage}</p>
+            <p class="my-1 min-h-[48px] py-1 text-right text-brand-warning">{state.errorMessage}</p>
         </form>
     );
 });

@@ -115,7 +115,7 @@ export const LoginForm = component$(() => {
                 type="submit"
                 text="Submit"
             />
-            <p class="min-h-[48px] py-1 text-brand-warning">{loginStore.errorMessage}</p>
+            <p class="my-1 min-h-[48px] py-1 text-brand-warning">{loginStore.errorMessage}</p>
         </form>
     );
 });

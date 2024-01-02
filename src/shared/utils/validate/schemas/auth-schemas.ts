@@ -1,13 +1,14 @@
 /* eslint-disable camelcase */
 import type { UserSignupData, LoginData } from "#/api";
 
-import { PostalCodeValidatorPattern, PhoneValidatorPattern, validateSchema, validateField, z } from "./utils";
-import { CountryMap } from "./contry-map";
+import { PostalCodeValidatorPattern, PhoneValidatorPattern, validateSchema, validateField, z } from "../utils";
+import { CountryMap } from "../contry-map";
 
 export const loginDataValidationSchema = z.object({
     password: z
         .string({ required_error: "Password is required" })
         .min(4, { message: "Password length must be at least 4 characters long" })
+        .max(60, { message: "Password length must be at most 60 characters long" })
         .trim(),
     email: z.string({ required_error: "Invalid email" }).trim().email({
         message: "Invalid email",
@@ -30,6 +31,8 @@ export const getAddressValidationSchema = (code: CountryMap) => {
             .string({ required_error: "Phone is required" })
             .regex(PhoneValidatorPattern[code], { message: "Invalid phone" })
             .trim(),
+        telegram: z.string({}),
+        whatsapp: z.string({}),
     });
 };
 
@@ -57,8 +60,12 @@ export const getSignupDataValidationSchema = (country?: string) => {
         firstName: z
             .string({ required_error: "Name is required" })
             .min(2, { message: "Name length must be at least 2 characters long" })
+            .max(60, { message: "Name length must be at most 60 characters long" })
             .trim(),
-        lastName: z.string({ required_error: "Last name must be a string" }).trim(),
+        lastName: z
+            .string({ required_error: "Last name must be a string" })
+            .max(60, { message: "Name length must be at most 60 characters long" })
+            .trim(),
     });
 
     return userSchema.merge(getAddressValidationSchema(code)).merge(getContactValidationSchema(code));

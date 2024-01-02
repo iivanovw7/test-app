@@ -1,3 +1,5 @@
+import type { ObjectId } from "mongodb";
+
 export type TBasicApiList<Data> = {
     count: number;
     data: Data[];
@@ -32,8 +34,8 @@ export type QueryUserContactsModel = {
 export type QueryUserAddressModel = {
     postalCode: string;
     apartment: string;
-    building: string;
     country: "Russia";
+    building: string;
     street: string;
     city: string;
 };
@@ -41,21 +43,25 @@ export type QueryUserAddressModel = {
 export type QueryUserModel = {
     contacts: QueryUserContactsModel;
     address: QueryUserAddressModel;
+    createdAt: string;
+    updatedAt: string;
     firstName: string;
     lastName: string;
     password: string;
     role: UserRole;
     email: string;
-    _id: string;
+    _id: ObjectId;
 };
 
 export type QueryUser = Omit<QueryUserModel, "password" | "_id"> & {
     id: string;
 };
 
-export type UserSignupData = Omit<QueryUserModel, "contacts" | "address" | "role" | "_id"> &
+export type UserSignupData = Omit<QueryUserModel, "createdAt" | "updatedAt" | "contacts" | "address" | "role" | "_id"> &
     Pick<QueryUserAddressModel, "postalCode" | "apartment" | "building" | "country" | "street" | "city"> &
     Pick<QueryUserContactsModel, "telegram" | "whatsapp" | "phone">;
+
+export type UserUpdateData = Partial<UserSignupData> & Partial<QueryUserContactsModel>;
 
 export const UserRole = {
     ADMIN: "ADMIN",
