@@ -12,6 +12,9 @@ export const validation = defineMiddleware(async (context, next) => {
         case apiRoutes.signup.path: {
             return AuthValidation.signup(context, next);
         }
+        case apiRoutes.updateMe.path: {
+            return AuthValidation.updateMe(context, next);
+        }
         default: {
             return next();
         }

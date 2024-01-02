@@ -45,10 +45,12 @@ export const Button = component$<ButtonProperties>((properties) => {
         ...restProperties
     } = properties;
 
-    let combinedClassName = cx(styles.button({ variant, color, size }), classes.button);
-    let buttonText = <span class={cx(styles.text({ variant, color, size }), classes.text)}>{textProperty}</span>;
+    let combinedClassName = cx(styles.button({ disabled, variant, color, size }), classes.button);
+    let buttonText = (
+        <span class={cx(styles.text({ disabled, variant, color, size }), classes.text)}>{textProperty}</span>
+    );
     let loader = (
-        <div class={cx(styles.loader({ variant, color, size }), styles.loader)}>
+        <div class={cx(styles.loader({ disabled, variant, color, size }), styles.loader)}>
             <Loader color="#E5E7EB" />
         </div>
     );

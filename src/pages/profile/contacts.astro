@@ -1,0 +1,25 @@
+---
+
+import MainLayout from "@/layouts/main-layout.astro";
+import { apiRoutes, routes } from "@/shared/routes";
+import { ACCESS_TOKEN_KEY } from "@/shared/api";
+import { Profile } from "@/widgets";
+
+const { API_URL } = import.meta.env; 
+
+const usersCountResponse = await fetch(`${API_URL}/${apiRoutes.userCount.path}`);
+
+const profileResponse = await fetch(`${API_URL}/${apiRoutes.getMe.path}`, {
+    headers: {
+        [ACCESS_TOKEN_KEY]: Astro.cookies.get(ACCESS_TOKEN_KEY)?.value ?? null
+    },
+});
+
+const userCount = await usersCountResponse.json();
+const profileResult = await profileResponse.json();
+
+---
+
+<MainLayout slug={routes.profile.path} description="Website" title="Profile">
+    <Profile slug={routes.profileContacts.path} profile={profileResult?.data} userCount={userCount?.data} />
+</MainLayout>

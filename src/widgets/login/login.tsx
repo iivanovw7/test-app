@@ -50,7 +50,7 @@ export const Login = component$<LoginProperties>((properties) => {
                                             "after:content-[''] after:h-6 after:block",
                                             "before:content-[''] before:h-6 before:block",
                                             {
-                                                "md:py-0 md:before:h-2 md:after:h-2 max-w-[720px]":
+                                                [cx("md:py-0 md:before:h-6", "md:after:h-2 max-w-[720px]")]:
                                                     loginState.type === "SIGNUP",
                                                 "max-w-[450px]": loginState.type === "SIGNIN",
                                             },
