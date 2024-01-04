@@ -5,7 +5,7 @@ import type { ZodSchema } from "zod";
 
 import { CountryMap } from "./contry-map";
 
-export { ZodTransformer, ZodSchema, z } from "zod";
+export { z, ZodSchema, ZodTransformer } from "zod";
 
 export const PhoneValidatorPattern = {
     [CountryMap.RUSSIA]: /^(\+?7|8)?9\d{9}$/,

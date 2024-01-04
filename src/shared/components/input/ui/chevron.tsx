@@ -7,19 +7,19 @@ export type ChevronProperties = SVGProps<SVGElement> & {
 };
 
 export const Chevron = component$<ChevronProperties>(
-    ({ color = "currentColor", height, width, size, ...restProperties }) => {
+    ({ color = "currentColor", height, size, width, ...restProperties }) => {
         return (
             <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height={size || height || "24"}
-                width={size || width || "24"}
-                class="ms-2.5 h-2.5 w-2.5"
                 aria-hidden="true"
-                viewBox="0 0 10 6"
+                class="ms-2.5 h-2.5 w-2.5"
                 fill="none"
+                height={size || height || "24"}
+                viewBox="0 0 10 6"
+                width={size || width || "24"}
+                xmlns="http://www.w3.org/2000/svg"
                 {...restProperties}
             >
-                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" d="m1 1 4 4 4-4" stroke={color} />
+                <path d="m1 1 4 4 4-4" stroke={color} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
             </svg>
         );
     },

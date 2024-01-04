@@ -9,17 +9,17 @@ type SetLoadingQRL = QRL<SetLoading>;
 
 export type MakeApiRequestData<Request_ extends () => Promise<any>> = {
     onError?: (error: TBasicApiError) => void;
-    setLoading: SetLoadingQRL | SetLoading;
     request: Request_;
+    setLoading?: SetLoading | SetLoadingQRL;
 };
 
 export const makeApiRequest = async <Request_ extends () => Promise<any>, Response_ = AsyncReturnType<Request_>>({
-    setLoading,
-    request,
     onError,
+    request,
+    setLoading,
 }: MakeApiRequestData<Request_>): Promise<Voidable<Response_ extends Maybe<void> ? true : Response_>> => {
     try {
-        setLoading(true);
+        setLoading?.(true);
 
         let result = await request();
 
@@ -29,6 +29,6 @@ export const makeApiRequest = async <Request_ extends () => Promise<any>, Respon
 
         onError?.(error);
     } finally {
-        setLoading(false);
+        setLoading?.(false);
     }
 };

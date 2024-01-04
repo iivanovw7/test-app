@@ -1,18 +1,18 @@
-import { prop as property, defaultTo, sortWith, ascend, values, pipe } from "../utils";
+import { ascend, defaultTo, pipe, prop as property, sortWith, values } from "../utils";
 import { routes } from "./routes";
 
-const { profile, login, home } = routes;
+const { home, login, profile } = routes;
 
 export type NavigationElement = {
-    isPrivate: boolean;
-    order?: number;
-    label: string;
     href: string;
+    isPrivate: boolean;
+    label: string;
+    order?: number;
 };
 
 export const navigation: Record<string, NavigationElement> = {
-    profile: { href: profile.path, label: "Profile", isPrivate: true, order: 99 },
-    home: { isPrivate: false, href: home.path, label: "Home", order: 0 },
+    home: { href: home.path, isPrivate: false, label: "Home", order: 0 },
+    profile: { href: profile.path, isPrivate: true, label: "Account", order: 99 },
 };
 
 const orderProperty = defaultTo(999, property("order")) as (v: NavigationElement) => number;

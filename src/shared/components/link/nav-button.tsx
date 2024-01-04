@@ -10,14 +10,14 @@ import { Link } from "./link";
 export type NavButtonProperties = Pick<ProvidersProperties, "slug"> & LinkProperties;
 
 const navButton = cva(["inline-flex items-center no-underline", "px-8 py-3", "w-full rounded"], {
+    defaultVariants: {
+        active: false,
+    },
     variants: {
         active: {
             false: ["bg-stone-50 text-brand-text dark:text-brand-dark-text", "hover:text-gray-900 dark:bg-stone-800"],
             true: ["bg-brand-primary", "text-brand-dark-text", "dark:bg-brand-dark-primary"],
         },
-    },
-    defaultVariants: {
-        active: false,
     },
 });
 
@@ -29,8 +29,8 @@ export const NavButton = component$<NavButtonProperties>((properties) => {
     return (
         <Link
             class={navButton({ active: isActive })}
-            target="_self"
             href={href}
+            target="_self"
             {...(isActive && {
                 "aria-current": "page",
             })}

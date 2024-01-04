@@ -1,17 +1,17 @@
 import type { ProvidersProperties } from "@/layouts/providers";
 
-import { component$ } from "@builder.io/qwik";
 import { Footer, Header } from "@/entities";
 import { PageLayout } from "@/layouts/page";
+import { component$ } from "@builder.io/qwik";
 import { cx } from "cva";
 
 export type HomeProperties = ProvidersProperties;
 
 export const Home = component$<HomeProperties>((properties) => {
-    let { userCount, profile, slug } = properties;
+    let { profile, requestCount, slug, userCount } = properties;
 
     return (
-        <PageLayout userCount={userCount} profile={profile} slug={slug}>
+        <PageLayout profile={profile} requestCount={requestCount} slug={slug} userCount={userCount}>
             <Header />
             <div class="relative">
                 <div class="mx-auto max-w-screen-xl px-8">
@@ -21,8 +21,6 @@ export const Home = component$<HomeProperties>((properties) => {
                             "lg:min-h-[calc(100vh-theme(spacing.footer)-theme(spacing.header))]",
                         )}
                     >
-                        <strong class="text-sm text-brand-secondary dark:text-brand-dark-secondary">Home</strong>
-                        <hr class="my-1 h-px border-0 bg-gray-400 dark:bg-gray-700" />
                         <section class={cx("py-4 lg:py-8", "mx-auto px-0 py-0", "max-w-none xl:ml-0")}>
                             <article class={cx("max-w-none")}>
                                 <h1 class="mb-1 text-3xl text-brand-text dark:text-brand-dark-text sm:text-5xl">

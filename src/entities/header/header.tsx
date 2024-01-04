@@ -1,9 +1,9 @@
+import { ThemeSwitch } from "@/features/theme-switch";
+import { Button } from "@/shared/components";
 import { LocationContext, RootContext } from "@/shared/context";
 import { apiRoutes, navLinks, routes } from "@/shared/routes";
 import { component$, useContext } from "@builder.io/qwik";
-import { ThemeSwitch } from "@/features/theme-switch";
 import { LuMenu } from "@qwikest/icons/lucide";
-import { Button } from "@/shared/components";
 import { cx } from "cva";
 
 export const Header = component$(() => {
@@ -22,10 +22,10 @@ export const Header = component$(() => {
             >
                 <a class="flex items-center justify-center" href="https://flowbite.com/">
                     <img
-                        src="https://flowbite.com/docs/images/logo.svg"
-                        class="m-0 mr-3 h-6 w-6"
                         alt="Flowbite Logo"
+                        class="m-0 mr-3 h-6 w-6"
                         height={24}
+                        src="https://flowbite.com/docs/images/logo.svg"
                         width={24}
                     />
                     <span class={cx("self-center whitespace-nowrap text-2xl", "font-semibold dark:text-white")}>
@@ -35,6 +35,8 @@ export const Header = component$(() => {
                 <div class="flex flex-row items-center gap-2 md:hidden">
                     <ThemeSwitch />
                     <button
+                        aria-controls="navbar-default"
+                        aria-expanded="false"
                         class={cx(
                             "roundp-2",
                             "inline-flex h-8 w-8 items-center",
@@ -46,8 +48,6 @@ export const Header = component$(() => {
                             "md:hidden",
                         )}
                         data-collapse-toggle="navbar-default"
-                        aria-controls="navbar-default"
-                        aria-expanded="false"
                         type="button"
                     >
                         <span class="sr-only">Open main menu</span>
@@ -84,11 +84,14 @@ export const Header = component$(() => {
                             )}
                         >
                             {navLinks.map((link, index) => {
-                                let { isPrivate, label, href } = link;
+                                let { href, isPrivate, label } = link;
 
                                 if (isPrivate && !profile) {
                                     return null;
                                 }
+
+                                let isActive =
+                                    slug === href || (href.startsWith(routes.profile.path) && slug.includes(href));
 
                                 return (
                                     <li class="m-0 flex items-center p-0" key={index}>
@@ -105,8 +108,8 @@ export const Header = component$(() => {
                                                         "text-brand-primary",
                                                         "dark:text-brand-dark-primary",
                                                         "pointer-events-none",
-                                                    )]: slug === href,
-                                                    [cx("text-brand-text", "dark:text-brand-dark-text")]: slug !== href,
+                                                    )]: isActive,
+                                                    [cx("text-brand-text", "dark:text-brand-dark-text")]: !isActive,
                                                 },
                                             )}
                                             href={href}
@@ -120,30 +123,30 @@ export const Header = component$(() => {
                         <ThemeSwitch class="hidden md:block" />
                         {profile && (
                             <Button
+                                as="button"
+                                classes={{ button: "m-0" }}
+                                color="primary"
                                 onClick$={async () => {
                                     await fetch(apiRoutes.logout.path);
 
                                     window.location.replace(routes.home.path);
                                 }}
-                                classes={{ button: "m-0" }}
-                                color="primary"
-                                variant="fill"
-                                text="Logout"
                                 size="medium"
-                                as="button"
+                                text="Logout"
+                                variant="fill"
                             />
                         )}
                         {!profile && (
                             <Button
+                                as="link"
                                 classes={{
                                     button: "m-0 h-full w-full",
                                 }}
-                                variant="gradient-outline"
                                 href={routes.login.path}
-                                target="_self"
                                 size="small"
+                                target="_self"
                                 text="Login"
-                                as="link"
+                                variant="gradient-outline"
                             />
                         )}
                     </div>

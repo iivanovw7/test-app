@@ -1,16 +1,16 @@
-import type { TBasicApiResult, TBasicApiError } from "#/api";
+import type { TBasicApiError, TBasicApiResult } from "#/api";
 import type { AstroCookies } from "astro";
 
-import { HttpStatus } from "#/http";
 import { ErrorCode } from "#/api";
+import { HttpStatus } from "#/http";
 import { SignJWT } from "jose";
 
-import { SECONDS_IN_MINUTE, SECONDS_IN_DAY } from "../utils";
+import { SECONDS_IN_DAY, SECONDS_IN_MINUTE } from "../utils";
 
 export const resultSuccess = <T>(fields?: TSuccessFields<T>): TBasicApiResult<T> => ({
+    data: null,
     message: "Ok",
     success: true,
-    data: null,
     ...fields,
 });
 
@@ -21,21 +21,19 @@ export const resultError = (fields?: TErrorFields): TBasicApiError => ({
     ...fields,
 });
 
-export type TSuccessFields<T> = Partial<Pick<TBasicApiResult<T>, "message" | "data">>;
-export type TErrorFields = Partial<Pick<TBasicApiError, "message" | "error" | "code">>;
+export type TSuccessFields<T> = Partial<Pick<TBasicApiResult<T>, "data" | "message">>;
+export type TErrorFields = Partial<Pick<TBasicApiError, "code" | "error" | "message">>;
 
 /**
  *  Represents data constructor.
  */
 export const Result = {
     /**
-     * Success server http response.
-     * @returns {Response} response - http response.
+     * Server error.
+     * @returns {Object} response - response data.
      */
-    successResponse: <Data>(fields?: TSuccessFields<Data>) => {
-        return new Response(JSON.stringify(Result.success(fields)), {
-            status: HttpStatus.OK,
-        });
+    error: (fields?: TErrorFields): TBasicApiError => {
+        return resultError(fields);
     },
 
     /**
@@ -55,29 +53,31 @@ export const Result = {
     },
 
     /**
-     * Server error.
-     * @returns {Object} response - response data.
+     * Success server http response.
+     * @returns {Response} response - http response.
      */
-    error: (fields?: TErrorFields): TBasicApiError => {
-        return resultError(fields);
+    successResponse: <Data>(fields?: TSuccessFields<Data>) => {
+        return new Response(JSON.stringify(Result.success(fields)), {
+            status: HttpStatus.OK,
+        });
     },
 };
 
 export const cleanTokens = (cookies: AstroCookies) => {
     cookies.set(ACCESS_TOKEN_KEY, "", {
-        sameSite: "none",
         httpOnly: true,
-        secure: true,
         maxAge: 0,
         path: "/",
+        sameSite: "none",
+        secure: true,
     });
 
     cookies.set(REFRESH_TOKEN_KEY, "", {
-        sameSite: "none",
         httpOnly: true,
-        secure: true,
         maxAge: 0,
         path: "/",
+        sameSite: "none",
+        secure: true,
     });
 };
 
@@ -89,11 +89,11 @@ export const issueRefreshToken = async (cookies: AstroCookies, email: string) =>
         .sign(REFRESH_TOKEN_SECRET);
 
     cookies.set(REFRESH_TOKEN_KEY, refreshToken, {
-        maxAge: REFRESH_TOKEN_MAX_AGE,
-        sameSite: "none",
         httpOnly: true,
-        secure: true,
+        maxAge: REFRESH_TOKEN_MAX_AGE,
         path: "/",
+        sameSite: "none",
+        secure: true,
     });
 };
 
@@ -105,11 +105,11 @@ export const issueAccessToken = async (cookies: AstroCookies, email: string) => 
         .sign(ACCESS_TOKEN_SECRET);
 
     cookies.set(ACCESS_TOKEN_KEY, accessToken, {
-        maxAge: ACCESS_TOKEN_MAX_AGE,
-        sameSite: "none",
         httpOnly: true,
-        secure: true,
+        maxAge: ACCESS_TOKEN_MAX_AGE,
         path: "/",
+        sameSite: "none",
+        secure: true,
     });
 };
 

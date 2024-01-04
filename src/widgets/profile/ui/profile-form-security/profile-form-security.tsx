@@ -13,9 +13,9 @@ export const ProfileSecurityForm = component$(() => {
                 "md:min-w-[450px]",
                 "md:px-8 md:py-2",
             )}
-            preventdefault:submit
             method="post"
             noValidate
+            preventdefault:submit
         >
             <h2 class="my-0 text-brand-text dark:text-brand-dark-text">Edit profile</h2>
             <hr class="my-2 h-px border-0 bg-gray-400 dark:bg-gray-700" />

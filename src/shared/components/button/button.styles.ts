@@ -16,53 +16,53 @@ const button = cva(
         compoundVariants: [
             {
                 class: ["relative inline-flex items-center justify-center", "p-0.5"],
-                variant: "gradient-outline",
                 size: "x-small",
+                variant: "gradient-outline",
             },
             {
                 class: ["relative inline-flex items-center justify-center", "p-0.5"],
-                variant: "gradient-outline",
                 size: "small",
+                variant: "gradient-outline",
             },
             {
                 class: ["relative inline-flex items-center justify-center", "p-0.5"],
-                variant: "gradient-outline",
                 size: "medium",
+                variant: "gradient-outline",
             },
             {
                 class: "px-2 py-1 text-xs",
-                variant: "fill",
                 size: "x-small",
+                variant: "fill",
             },
             {
                 class: "px-3 py-2 text-xs",
-                variant: "fill",
                 size: "small",
+                variant: "fill",
             },
             {
                 class: "px-3 py-2 text-sm",
-                variant: "fill",
                 size: "medium",
+                variant: "fill",
             },
             {
                 class: "px-3 py-2.5 text-sm",
-                variant: "fill",
                 size: "large",
+                variant: "fill",
             },
             {
-                variant: "gradient-duonote",
                 class: "px-3 py-2 text-xs",
                 size: "x-small",
+                variant: "gradient-duonote",
             },
             {
-                variant: "gradient-duonote",
                 class: "px-3 py-2 text-sm",
                 size: "small",
+                variant: "gradient-duonote",
             },
             {
                 class: "px-3 py-2.5 text-sm",
-                variant: "gradient-duonote",
                 size: "medium",
+                variant: "gradient-duonote",
             },
             {
                 class: ["bg-brand-primary text-stone-50"],
@@ -72,8 +72,8 @@ const button = cva(
             {
                 class: ["opacity-50"],
                 color: "primary",
-                variant: "fill",
                 disabled: true,
+                variant: "fill",
             },
             {
                 class: "bg-brand-secondary",
@@ -86,13 +86,32 @@ const button = cva(
                 variant: "fill",
             },
             {
-                variant: "transparent",
+                class: ["bg-brand-error text-stone-50"],
+                color: "error",
+                variant: "fill",
+            },
+            {
                 class: ["border-0"],
                 color: "tertiary",
+                variant: "transparent",
             },
         ],
+        defaultVariants: {
+            color: "primary",
+            disabled: false,
+            size: "medium",
+            variant: "fill",
+        },
         variants: {
             color: {
+                error: [
+                    "focus:ring-brand-focus-ring-error",
+                    "dark:focus:ring-brand-dark-focus-ring-error",
+                    "hover:brightness-125",
+                ],
+                primary: ["hover:brightness-125"],
+                secondary: ["hover:brightness-125"],
+                success: [],
                 tertiary: [
                     "border",
                     "text-brand-text",
@@ -103,12 +122,20 @@ const button = cva(
                     "dark:text-brand-dark-text",
                     "dark:hover:bg-brand-dark-hover",
                 ],
-                secondary: ["hover:brightness-125"],
-                primary: ["hover:brightness-125"],
-                success: [],
-                error: [],
+            },
+            disabled: {
+                false: [],
+                true: ["pointer-events-none"],
+            },
+            size: {
+                large: ["px-5 py-2.5 text-sm"],
+                medium: ["p-2 text-sm"],
+                small: ["text-xs"],
+                "x-small": ["p-1 text-xs"],
             },
             variant: {
+                fill: ["text-brand-text"],
+                "gradient-duonote": ["text-brand-text"],
                 "gradient-outline": [
                     "group",
                     "bg-gradient-to-br from-purple-600 to-blue-500",
@@ -116,26 +143,8 @@ const button = cva(
                     "bg-brand-background text-brand-text",
                     "dark:bg-brand-dark-background",
                 ],
-                fill: ["bg-brand-primary text-brand-text"],
-                "gradient-duonote": ["text-brand-text"],
                 transparent: [],
             },
-            size: {
-                large: ["px-5 py-2.5 text-sm"],
-                "x-small": ["p-1 text-xs"],
-                medium: ["p-2 text-sm"],
-                small: ["text-xs"],
-            },
-            disabled: {
-                true: ["pointer-events-none"],
-                false: [],
-            },
-        },
-        defaultVariants: {
-            color: "primary",
-            variant: "fill",
-            disabled: false,
-            size: "medium",
         },
     },
 );
@@ -150,8 +159,8 @@ const text = cva(["relative w-full"], {
                 "dark:bg-brand-dark-background",
                 "px-3 py-2 text-xs group-hover:bg-opacity-0",
             ],
-            variant: "gradient-outline",
             size: "x-small",
+            variant: "gradient-outline",
         },
         {
             class: [
@@ -161,8 +170,8 @@ const text = cva(["relative w-full"], {
                 "dark:bg-brand-dark-background",
                 "px-3 py-2 text-xs group-hover:bg-opacity-0",
             ],
-            variant: "gradient-outline",
             size: "small",
+            variant: "gradient-outline",
         },
         {
             class: [
@@ -172,81 +181,56 @@ const text = cva(["relative w-full"], {
                 "dark:bg-brand-dark-background",
                 "px-5 py-2.5 text-sm group-hover:bg-opacity-0",
             ],
-            variant: "gradient-outline",
             size: "medium",
+            variant: "gradient-outline",
         },
         {
+            class: [],
             color: "primary",
             variant: "fill",
-            class: [],
         },
         {
             class: ["text-md"],
-            variant: "fill",
             size: "medium",
+            variant: "fill",
         },
     ],
+    defaultVariants: {
+        color: "primary",
+        disabled: false,
+        size: "medium",
+        variant: "fill",
+    },
     variants: {
-        variant: {
-            "gradient-outline": ["transition-all duration-75 ease-in"],
-            "gradient-duonote": [],
-            transparent: [],
-            fill: [],
-        },
         color: {
-            secondary: [],
-            tertiary: [],
-            primary: [],
-            success: [],
             error: [],
-        },
-        size: {
-            "x-small": [],
-            medium: [],
-            small: [],
-            large: [],
+            primary: [],
+            secondary: [],
+            success: [],
+            tertiary: [],
         },
         disabled: {
             false: [],
             true: [],
         },
-    },
-    defaultVariants: {
-        color: "primary",
-        variant: "fill",
-        disabled: false,
-        size: "medium",
+        size: {
+            large: [],
+            medium: [],
+            small: [],
+            "x-small": [],
+        },
+        variant: {
+            fill: [],
+            "gradient-duonote": [],
+            "gradient-outline": ["transition-all duration-75 ease-in"],
+            transparent: [],
+        },
     },
 });
 
 const loader = cva(
     ["absolute left-0 top-0 z-10 rounded", "flex h-full w-full flex-col", "items-center justify-center"],
     {
-        variants: {
-            color: {
-                secondary: [],
-                tertiary: [],
-                primary: [],
-                success: [],
-                error: [],
-            },
-            variant: {
-                "gradient-outline": [],
-                "gradient-duonote": [],
-                transparent: [],
-                fill: [],
-            },
-            size: {
-                "x-small": [],
-                medium: [],
-                small: [],
-                large: [],
-            },
-            disabled: {
-                false: [],
-                true: [],
-            },
-        },
         compoundVariants: [
             {
                 class: ["bg-brand-primary"],
@@ -266,9 +250,34 @@ const loader = cva(
         ],
         defaultVariants: {
             color: "primary",
-            variant: "fill",
             disabled: false,
             size: "medium",
+            variant: "fill",
+        },
+        variants: {
+            color: {
+                error: [],
+                primary: [],
+                secondary: [],
+                success: [],
+                tertiary: [],
+            },
+            disabled: {
+                false: [],
+                true: [],
+            },
+            size: {
+                large: [],
+                medium: [],
+                small: [],
+                "x-small": [],
+            },
+            variant: {
+                fill: [],
+                "gradient-duonote": [],
+                "gradient-outline": [],
+                transparent: [],
+            },
         },
     },
 );

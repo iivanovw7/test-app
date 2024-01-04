@@ -1,7 +1,7 @@
 export type NavigatorUAData = {
-    brands: { version: string; brand: string }[];
-    platform: string;
+    brands: { brand: string; version: string }[];
     mobile: boolean;
+    platform: string;
 };
 
 /**
@@ -26,7 +26,7 @@ export const getUserAgent = (): string => {
     let uaData = (navigator as AnyObject).userAgentData as NavigatorUAData | undefined;
 
     if (uaData && Array.isArray(uaData.brands)) {
-        return uaData.brands.map(({ version, brand }) => `${brand}/${version}`).join(" ");
+        return uaData.brands.map(({ brand, version }) => `${brand}/${version}`).join(" ");
     }
 
     return navigator.userAgent;

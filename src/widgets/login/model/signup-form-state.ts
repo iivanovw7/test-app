@@ -1,77 +1,74 @@
 import type { UserSignupData } from "#/api";
 
-import { createContextId, useStore, $ } from "@builder.io/qwik";
 import { CountryMap } from "@/shared/utils";
+import { $, createContextId, useStore } from "@builder.io/qwik";
 
 export type SignupFormValidation = {
-    postalCode: Nullable<string>;
-    firstName: Nullable<string>;
     apartment: Nullable<string>;
-    password: Nullable<string>;
-    lastName: Nullable<string>;
     building: Nullable<string>;
+    city: Nullable<string>;
+    country: Nullable<string>;
+    email: Nullable<string>;
+    firstName: Nullable<string>;
+    lastName: Nullable<string>;
+    password: Nullable<string>;
+    phone: Nullable<string>;
+    postalCode: Nullable<string>;
+    street: Nullable<string>;
     telegram: Nullable<string>;
     whatsapp: Nullable<string>;
-    country: Nullable<string>;
-    street: Nullable<string>;
-    email: Nullable<string>;
-    phone: Nullable<string>;
-    city: Nullable<string>;
 };
 
 export type SignupFormState = {
-    setValidationVield: <Key extends keyof SignupFormValidation>(field: Key, value: SignupFormValidation[Key]) => void;
+    form: UserSignupData;
+    resetValidation: () => void;
     setFormField: <Key extends keyof UserSignupData>(field: Key, value: UserSignupData[Key]) => void;
     setValidation: (validation: SignupFormValidation) => void;
     setValidationEnabled: (isEnabled: boolean) => void;
+    setValidationVield: <Key extends keyof SignupFormValidation>(field: Key, value: SignupFormValidation[Key]) => void;
     validation: SignupFormValidation;
-    resetValidation: () => void;
     validationEnabled: boolean;
-    form: UserSignupData;
 };
 
 export const SIGNUP_INITIAL_FORM_STATE: UserSignupData = {
-    country: CountryMap.RUSSIA,
-    postalCode: "",
-    firstName: "",
     apartment: "",
+    building: "",
+    city: "",
+    country: CountryMap.RUSSIA,
+    email: "",
+    firstName: "",
     lastName: "",
     password: "",
-    building: "",
+    phone: "",
+    postalCode: "",
+    street: "",
     telegram: "",
     whatsapp: "",
-    street: "",
-    email: "",
-    phone: "",
-    city: "",
 };
 
 export const SIGNUP_INITIAL_VALIDATION_STATE: SignupFormValidation = {
-    postalCode: null,
-    firstName: null,
     apartment: null,
+    building: null,
+    city: null,
+    country: null,
+    email: null,
+    firstName: null,
     lastName: null,
     password: null,
-    building: null,
+    phone: null,
+    postalCode: null,
+    street: null,
     telegram: null,
     whatsapp: null,
-    country: null,
-    street: null,
-    email: null,
-    phone: null,
-    city: null,
 };
 
 export const SignupFormContext = createContextId<SignupFormState>("signup-form-context");
 
 export const useSignupFormState = () => {
     return useStore<SignupFormState>({
-        setValidationVield: $(function <Key extends keyof SignupFormValidation>(
-            this: SignupFormState,
-            field: Key,
-            value: SignupFormValidation[Key],
-        ) {
-            this.validation[field] = value;
+        form: SIGNUP_INITIAL_FORM_STATE,
+        resetValidation: $(function (this: SignupFormState) {
+            this.validation = SIGNUP_INITIAL_VALIDATION_STATE;
         }),
         setFormField: $(function <Key extends keyof UserSignupData>(
             this: SignupFormState,
@@ -86,11 +83,14 @@ export const useSignupFormState = () => {
         setValidationEnabled: $(function (this: SignupFormState, isEnabled: boolean) {
             this.validationEnabled = isEnabled;
         }),
-        resetValidation: $(function (this: SignupFormState) {
-            this.validation = SIGNUP_INITIAL_VALIDATION_STATE;
+        setValidationVield: $(function <Key extends keyof SignupFormValidation>(
+            this: SignupFormState,
+            field: Key,
+            value: SignupFormValidation[Key],
+        ) {
+            this.validation[field] = value;
         }),
         validation: SIGNUP_INITIAL_VALIDATION_STATE,
-        form: SIGNUP_INITIAL_FORM_STATE,
         validationEnabled: false,
     });
 };

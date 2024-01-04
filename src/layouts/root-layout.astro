@@ -4,7 +4,7 @@ import { config } from "@/shared/config";
 
 import "./styles/global.css";
 
-const { description, title, tags, slug } = Astro.props;
+const { description, slug, tags, title } = Astro.props;
 
 const htmlTitle = `${config.meta.name} | ${title}`;
 const keywords = tags || config.meta.keywords;
@@ -17,12 +17,13 @@ const keywords = tags || config.meta.keywords;
         <meta charset='utf-8' />
         <title>{htmlTitle}</title>
         <link href={`${config.url}${slug}`} rel="canonical" />
-        <link type="image/x-icon" href="/favicon.svg" rel="icon" />
-        <meta name="application-name" content="Name" />
+        <link href="/favicon.svg" rel="icon" type="image/x-icon" />
+        <meta content="Name" name="application-name" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content={description} name="description" />
         <meta content={keywords.join(", ")} name="keywords" />
-        <script src="/js/theme.js" is:inline />
+        <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/datepicker.min.js" />
+        <script is:inline src="/js/theme.js" />
     </head>
     <body class="prose max-w-none bg-brand-background">
         <slot />

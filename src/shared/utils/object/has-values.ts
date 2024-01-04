@@ -1,4 +1,4 @@
-import { compose, values, length, filter, pipe, __ } from "ramda";
+import { __, compose, filter, length, pipe, values } from "ramda";
 import { isNotNil, notEqual } from "ramda-adjunct";
 
 const notEmptyValues = compose(values, filter(isNotNil));

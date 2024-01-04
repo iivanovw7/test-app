@@ -1,20 +1,20 @@
 import type { ProvidersProperties } from "@/layouts/providers";
 
-import { useContextProvider, component$ } from "@builder.io/qwik";
 import { PageLayout } from "@/layouts/page";
+import { component$, useContextProvider } from "@builder.io/qwik";
 import { cx } from "cva";
 
-import type { SignupFormState, LoginFormState, LoginState } from "./model";
+import type { LoginFormState, LoginState, SignupFormState } from "./model";
 
 import {
-    useSignupFormState,
-    useLoginFormState,
-    SignupFormContext,
-    LoginFormContext,
-    useLoginState,
     LoginContext,
+    LoginFormContext,
+    SignupFormContext,
+    useLoginFormState,
+    useLoginState,
+    useSignupFormState,
 } from "./model";
-import { SignupForm, LoginForm } from "./ui";
+import { LoginForm, SignupForm } from "./ui";
 
 export type LoginProperties = Pick<ProvidersProperties, "slug">;
 

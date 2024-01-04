@@ -2,88 +2,22 @@ import type { QueryUserModel } from "#/api";
 
 import { ErrorCode, UserRole } from "#/api";
 import { HttpStatus } from "#/http";
-import { jwtVerify } from "jose";
 import dayjs from "dayjs";
+import { jwtVerify } from "jose";
 
+import clientPromise from "../mongodb";
 import {
-    REFRESH_TOKEN_SECRET,
-    REFRESH_TOKEN_KEY,
-    issueRefreshToken,
-    issueAccessToken,
     cleanTokens,
     DB_NAME,
+    issueAccessToken,
+    issueRefreshToken,
+    REFRESH_TOKEN_KEY,
+    REFRESH_TOKEN_SECRET,
     Result,
 } from "../utils";
-import clientPromise from "../mongodb";
 
 export const AuthService = {
-    signup: async ({ request, cookies }) => {
-        try {
-            let body = await request.json();
-            let client = await clientPromise;
-            let collection = client.db(DB_NAME).collection("users");
-
-            let user = await collection.findOne<QueryUserModel>(
-                { email: body.email },
-                { projection: { emailVerified: 0 } },
-            );
-
-            if (user) {
-                return Result.errorResponse(HttpStatus.NOT_FOUND, {
-                    code: ErrorCode.USER_EXISTS,
-                    message: "User exists",
-                });
-            }
-
-            let { insertedId } = await collection.insertOne({
-                address: {
-                    postalCode: body.postalCode,
-                    apartment: body.apartment,
-                    building: body.building,
-                    country: body.country,
-                    street: body.street,
-                    city: body.city,
-                },
-                contacts: {
-                    phone: body.phone,
-                    telegram: "",
-                    whatsapp: "",
-                },
-                createdAt: dayjs().valueOf(),
-                updatedAt: dayjs().valueOf(),
-                firstName: body.firstName,
-                lastName: body.lastName,
-                password: body.password,
-                role: UserRole.USER,
-                email: body.email,
-            });
-
-            let newUser = await collection.findOne<QueryUserModel>({ _id: insertedId });
-
-            if (newUser) {
-                await issueAccessToken(cookies, newUser.email);
-                await issueRefreshToken(cookies, newUser.email);
-
-                let { password, _id, ...restUser } = newUser;
-
-                return Result.successResponse({
-                    data: { id: _id, ...restUser },
-                });
-            }
-
-            return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
-                code: ErrorCode.INTERNAL_SERVER_ERROR,
-                message: "Error creating user",
-            });
-        } catch (error) {
-            return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
-                code: ErrorCode.INTERNAL_SERVER_ERROR,
-                message: error.message,
-                error,
-            });
-        }
-    },
-    login: async ({ request, cookies }) => {
+    login: async ({ cookies, request }) => {
         try {
             let body = await request.json();
             let client = await clientPromise;
@@ -105,7 +39,7 @@ export const AuthService = {
                 await issueAccessToken(cookies, user.email);
                 await issueRefreshToken(cookies, user.email);
 
-                let { password, _id, ...restUser } = user;
+                let { _id, password, ...restUser } = user;
 
                 return Result.successResponse({
                     data: { id: _id, ...restUser },
@@ -119,12 +53,17 @@ export const AuthService = {
         } catch (error) {
             return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
                 code: ErrorCode.INTERNAL_SERVER_ERROR,
-                message: error.message,
                 error,
+                message: error.message,
             });
         }
     },
-    refresh: async ({ request, cookies }) => {
+    logout: async ({ cookies }) => {
+        cleanTokens(cookies);
+
+        return Result.successResponse({ message: "Logged out" });
+    },
+    refresh: async ({ cookies, request }) => {
         let refreshToken = cookies.get(REFRESH_TOKEN_KEY)?.value || request.headers.get(REFRESH_TOKEN_KEY);
 
         if (!refreshToken) {
@@ -145,14 +84,75 @@ export const AuthService = {
         } catch (error) {
             return Result.errorResponse(HttpStatus.UNAUTHORIZED, {
                 code: ErrorCode.INVALID_REFRESH_TOKEN,
-                message: error.message,
                 error,
+                message: error.message,
             });
         }
     },
-    logout: async ({ cookies }) => {
-        cleanTokens(cookies);
+    signup: async ({ cookies, request }) => {
+        try {
+            let body = await request.json();
+            let client = await clientPromise;
+            let collection = client.db(DB_NAME).collection("users");
 
-        return Result.successResponse({ message: "Logged out" });
+            let user = await collection.findOne<QueryUserModel>(
+                { email: body.email },
+                { projection: { emailVerified: 0 } },
+            );
+
+            if (user) {
+                return Result.errorResponse(HttpStatus.NOT_FOUND, {
+                    code: ErrorCode.USER_EXISTS,
+                    message: "User exists",
+                });
+            }
+
+            let { insertedId } = await collection.insertOne({
+                address: {
+                    apartment: body.apartment,
+                    building: body.building,
+                    city: body.city,
+                    country: body.country,
+                    postalCode: body.postalCode,
+                    street: body.street,
+                },
+                contacts: {
+                    phone: body.phone,
+                    telegram: "",
+                    whatsapp: "",
+                },
+                createdAt: dayjs().valueOf(),
+                email: body.email,
+                firstName: body.firstName,
+                lastName: body.lastName,
+                password: body.password,
+                role: UserRole.USER,
+                updatedAt: dayjs().valueOf(),
+            });
+
+            let newUser = await collection.findOne<QueryUserModel>({ _id: insertedId });
+
+            if (newUser) {
+                await issueAccessToken(cookies, newUser.email);
+                await issueRefreshToken(cookies, newUser.email);
+
+                let { _id, password, ...restUser } = newUser;
+
+                return Result.successResponse({
+                    data: { id: _id, ...restUser },
+                });
+            }
+
+            return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
+                code: ErrorCode.INTERNAL_SERVER_ERROR,
+                message: "Error creating user",
+            });
+        } catch (error) {
+            return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
+                code: ErrorCode.INTERNAL_SERVER_ERROR,
+                error,
+                message: error.message,
+            });
+        }
     },
 };

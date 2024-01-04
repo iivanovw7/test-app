@@ -1,27 +1,30 @@
 import type { ProvidersProperties } from "@/layouts/providers";
 
-import { useContextProvider, component$ } from "@builder.io/qwik";
-import { LuContact, LuUser } from "@qwikest/icons/lucide";
-import { NavButton } from "@/shared/components";
 import { Footer, Header } from "@/entities";
 import { PageLayout } from "@/layouts/page";
+import { NavButton } from "@/shared/components";
 import { routes } from "@/shared/routes";
+import { component$, useContextProvider } from "@builder.io/qwik";
+import { LuBadgeHelp, LuContact, LuUser } from "@qwikest/icons/lucide";
 import { cx } from "cva";
 
-import type { ProfileContactsFormState, ProfileFormState } from "./model";
+import type { ProfileContactsFormState, ProfileFormState, ProfileRequestsFormState } from "./model";
 
 import {
-    useProfileContactsFormState,
     ProfileContactsFormContext,
-    useProfileFormState,
     ProfileFormContext,
+    ProfileRequestsFormContext,
+    useProfileContactsFormState,
+    useProfileFormState,
+    useProfileRequestsFormState,
 } from "./model";
-import { ProfileContactsForm, ProfileSecurityForm, ProfileForm } from "./ui";
+import { ProfileContactsForm, ProfileForm, ProfileSecurityForm } from "./ui";
+import { ProfileRequestsForm } from "./ui/profile-form-requests";
 
 export type ProfileProperties = ProvidersProperties;
 
 export const Profile = component$<ProfileProperties>((properties) => {
-    let { userCount, profile, slug } = properties;
+    let { profile, requestCount, slug, userCount } = properties;
 
     let profileFormStore = useProfileFormState({
         initialForm: { firstName: profile?.firstName, lastName: profile?.lastName },
@@ -31,11 +34,14 @@ export const Profile = component$<ProfileProperties>((properties) => {
         initialForm: { ...profile?.contacts, ...profile?.address },
     });
 
+    let profileRequestsStore = useProfileRequestsFormState();
+
     useContextProvider<ProfileFormState>(ProfileFormContext, profileFormStore);
     useContextProvider<ProfileContactsFormState>(ProfileContactsFormContext, profileContactsStore);
+    useContextProvider<ProfileRequestsFormState>(ProfileRequestsFormContext, profileRequestsStore);
 
     return (
-        <PageLayout userCount={userCount} profile={profile} slug={slug}>
+        <PageLayout profile={profile} requestCount={requestCount} slug={slug} userCount={userCount}>
             <Header />
             <div class="relative">
                 <div class="mx-auto max-w-screen-xl px-8">
@@ -45,8 +51,6 @@ export const Profile = component$<ProfileProperties>((properties) => {
                             "lg:min-h-[calc(100vh-theme(spacing.footer)-theme(spacing.header))]",
                         )}
                     >
-                        <strong class="text-sm text-brand-secondary dark:text-brand-dark-secondary">Profile</strong>
-                        <hr class="my-1 h-px border-0 bg-gray-400 dark:bg-gray-700" />
                         <section class={cx("py-4 lg:py-8", "mx-auto px-0 py-0", "max-w-none xl:ml-0", "md:flex")}>
                             <ul
                                 class={cx(
@@ -65,8 +69,14 @@ export const Profile = component$<ProfileProperties>((properties) => {
                                 </li>
                                 <li class="p-0">
                                     <NavButton href={routes.profileContacts.path} slug={slug}>
-                                        <LuContact class="me-2 h-4 w-4 text-brand-text dark:text-brand-dark-text" />
+                                        <LuContact class="me-2 h-4 w-4 stroke-current" />
                                         Contacts
+                                    </NavButton>
+                                </li>
+                                <li class="p-0">
+                                    <NavButton href={routes.profileRequests.path} slug={slug}>
+                                        <LuBadgeHelp class="me-2 h-4 w-4 stroke-current" />
+                                        Requests
                                     </NavButton>
                                 </li>
                             </ul>
@@ -83,6 +93,9 @@ export const Profile = component$<ProfileProperties>((properties) => {
                                         }
                                         case routes.profileSecurity.path: {
                                             return <ProfileSecurityForm />;
+                                        }
+                                        case routes.profileRequests.path: {
+                                            return <ProfileRequestsForm />;
                                         }
                                         default: {
                                             return null;

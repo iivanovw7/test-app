@@ -1,16 +1,16 @@
-import { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_KEY, Result } from "@/shared/api";
-import { publicPaths, apiPaths, routes } from "@/shared/routes";
-import { defineMiddleware } from "astro/middleware";
-import { HttpStatus } from "#/http";
+import { ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET, Result } from "@/shared/api";
+import { apiPaths, publicPaths, routes } from "@/shared/routes";
 import { ErrorCode } from "#/api";
+import { HttpStatus } from "#/http";
+import { defineMiddleware } from "astro/middleware";
 import { jwtVerify } from "jose";
 
 const { API_URL } = import.meta.env;
 
 const VerifyResult = {
-    UNAUTHORIZED: "UNAUTHORIZED",
     AUTHORIZED: "AUTHORIZED",
     ERROR: "ERROR",
+    UNAUTHORIZED: "UNAUTHORIZED",
 } as const;
 
 type VerifyResult = (typeof VerifyResult)[keyof typeof VerifyResult];
@@ -30,7 +30,7 @@ const verifyAuth = async (accessToken?: MaybeValue<string>) => {
 };
 
 export const authorize = defineMiddleware(async (context, next) => {
-    let { pathname, origin } = context.url;
+    let { origin, pathname } = context.url;
     let { headers } = context.request;
 
     if (apiPaths.includes(pathname) && origin !== API_URL) {
