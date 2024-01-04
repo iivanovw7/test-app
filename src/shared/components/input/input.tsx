@@ -1,20 +1,20 @@
 import type { InputHTMLAttributes } from "@builder.io/qwik";
 
-import { useVisibleTask$, component$, useSignal } from "@builder.io/qwik";
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { cx } from "cva";
 
 export type InputProperties = InputHTMLAttributes<HTMLInputElement> & {
     classes?: Partial<{
         container: string;
-        label: string;
         input: string;
+        label: string;
     }>;
     errorText?: Nullable<string>;
     label?: string;
 };
 
 export const Input = component$<InputProperties>((properties) => {
-    let { classes = {}, errorText, label, value, id, ...restProperties } = properties;
+    let { classes = {}, errorText, id, label, value, ...restProperties } = properties;
 
     let hasError = useSignal(!!errorText?.length);
 
@@ -43,13 +43,13 @@ export const Input = component$<InputProperties>((properties) => {
                     "dark:focus:ring-brand-dark-focus-ring",
                     "text-brand-text",
                     {
-                        "focus:ring-brand-error dark:focus:ring-brand-error": !!errorText?.length,
                         "border-brand-error dark:border-brand-error": !!errorText?.length,
+                        "focus:ring-brand-error dark:focus:ring-brand-error": !!errorText?.length,
                     },
                     classes.input,
                 )}
-                value={value}
                 id={id}
+                value={value}
                 {...restProperties}
             />
             <p class="mb-1 mt-0 min-h-[22px] text-[12px] font-medium text-brand-error">

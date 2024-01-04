@@ -1,24 +1,24 @@
-import type { UserSignupData, QueryUser, LoginData } from "#/api";
+import type { LoginData, QueryUser, UserSignupData } from "#/api";
 
-import { createContextId, useStore, $ } from "@builder.io/qwik";
 import { makeApiRequest } from "@/shared/utils";
+import { $, createContextId, useStore } from "@builder.io/qwik";
 
-import { signup, login } from "../api";
+import { login, signup } from "../api";
 
 export const LoginType = {
-    SIGNUP: "SIGNUP",
     SIGNIN: "SIGNIN",
+    SIGNUP: "SIGNUP",
 } as const;
 
 export type LoginType = (typeof LoginType)[keyof typeof LoginType];
 
 export type LoginState = {
+    errorMessage: string;
+    isLoading: boolean;
     submit: <T extends LoginType>(
         type: T,
         values: T extends "SIGNUP" ? UserSignupData : LoginData,
     ) => Promise<Voidable<Nullable<QueryUser>>>;
-    errorMessage: string;
-    isLoading: boolean;
     type: LoginType;
 };
 
@@ -26,12 +26,17 @@ export const LoginContext = createContextId<LoginState>("login-context");
 
 export const useLoginState = (): LoginState => {
     return useStore<LoginState>({
+        errorMessage: "",
+        isLoading: false,
         submit: $(async function <T extends LoginType>(
             this: LoginState,
             type: T,
             values: T extends "SIGNUP" ? UserSignupData : LoginData,
         ) {
             let result = await makeApiRequest({
+                onError: () => {
+                    this.errorMessage = "Unknown error";
+                },
                 request: async () => {
                     let response =
                         type === LoginType.SIGNUP
@@ -49,15 +54,10 @@ export const useLoginState = (): LoginState => {
                 setLoading: (isLoading: boolean) => {
                     this.isLoading = isLoading;
                 },
-                onError: () => {
-                    this.errorMessage = "Unknown error";
-                },
             });
 
             return result?.id ? result : null;
         }),
-        isLoading: false,
-        errorMessage: "",
         type: "SIGNIN",
     });
 };

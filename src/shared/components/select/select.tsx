@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes } from "@builder.io/qwik";
 
-import { useVisibleTask$, component$, useSignal } from "@builder.io/qwik";
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { cx } from "cva";
 
 export type SelectOption = {
@@ -11,17 +11,17 @@ export type SelectOption = {
 export type SelectProperties = InputHTMLAttributes<HTMLSelectElement> & {
     classes?: Partial<{
         container: string;
-        select: string;
         label: string;
+        select: string;
     }>;
     errorText?: Nullable<string>;
-    options: SelectOption[];
     label?: string;
+    options: SelectOption[];
     value?: string;
 };
 
 export const Select = component$<SelectProperties>((properties) => {
-    let { classes = {}, errorText, options, label, value, id, ...restProperties } = properties;
+    let { classes = {}, errorText, id, label, options, value, ...restProperties } = properties;
 
     let hasError = useSignal(!!errorText?.length);
 

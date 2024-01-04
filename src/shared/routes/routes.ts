@@ -1,15 +1,16 @@
-import { propEq as propertyEq, filter, values, concat, pluck, pipe } from "../utils";
+import { concat, filter, pipe, pluck, propEq as propertyEq, values } from "../utils";
 
 export const BasePath = {
-    profileContacts: "/profile/contacts",
-    profileSecurity: "/profile/security",
-    profile: "/profile",
-    notFound: "/404",
-    login: "/login",
     home: "/",
+    login: "/login",
+    notFound: "/404",
+    profile: "/profile",
+    profileContacts: "/profile/contacts",
+    profileRequests: "/profile/requests",
+    profileSecurity: "/profile/security",
 } as const;
 
-const { profileContacts, profileSecurity, notFound, profile, login, home } = BasePath;
+const { home, login, notFound, profile, profileContacts, profileRequests, profileSecurity } = BasePath;
 
 export type BasePathKey = keyof typeof BasePath;
 export type BasePath = (typeof BasePath)[BasePathKey];
@@ -20,22 +21,27 @@ export type Route = {
 };
 
 export const routes: Record<BasePathKey, Route> = {
-    profileContacts: { path: profileContacts, isPrivate: true },
-    profileSecurity: { path: profileSecurity, isPrivate: true },
+    home: { isPrivate: false, path: home },
+    login: { isPrivate: false, path: login },
     notFound: { isPrivate: false, path: notFound },
     profile: { isPrivate: true, path: profile },
-    login: { isPrivate: false, path: login },
-    home: { isPrivate: false, path: home },
+    profileContacts: { isPrivate: true, path: profileContacts },
+    profileRequests: { isPrivate: true, path: profileRequests },
+    profileSecurity: { isPrivate: true, path: profileSecurity },
 };
 
 export const apiRoutes: Record<string, Route> = {
-    updateMe: { path: "/api/users/update-me", isPrivate: true },
-    userCount: { path: "/api/user-count", isPrivate: false },
-    refresh: { path: "/api/auth/refresh", isPrivate: false },
-    getMe: { path: "/api/users/get-me", isPrivate: false },
-    logout: { path: "/api/auth/logout", isPrivate: false },
-    signup: { path: "/api/auth/signup", isPrivate: false },
-    login: { path: "/api/auth/login", isPrivate: false },
+    createRequest: { isPrivate: true, path: "/api/requests/create" },
+    deleteRequest: { isPrivate: true, path: "/api/requests/delete" },
+    getMe: { isPrivate: false, path: "/api/users/get-me" },
+    getMyRequests: { isPrivate: true, path: "/api/requests/get-my-requests" },
+    login: { isPrivate: false, path: "/api/auth/login" },
+    logout: { isPrivate: false, path: "/api/auth/logout" },
+    refresh: { isPrivate: false, path: "/api/auth/refresh" },
+    requestCount: { isPrivate: false, path: "/api/request-count" },
+    signup: { isPrivate: false, path: "/api/auth/signup" },
+    updateMe: { isPrivate: true, path: "/api/users/update-me" },
+    userCount: { isPrivate: false, path: "/api/user-count" },
 };
 
 const collectPaths = pipe(values, pluck("path"));

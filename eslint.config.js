@@ -9,9 +9,9 @@ import jsdoc from "eslint-plugin-jsdoc";
 const compat = new FlatCompat();
 
 export default defineFlatConfig([
-    perfectionistAlphabetical,
     ...eslintConfig,
     ...eslintConfigAstro,
+    perfectionistAlphabetical,
     ...compat.config({
         rules: {
             "tailwindcss/no-custom-classname": [

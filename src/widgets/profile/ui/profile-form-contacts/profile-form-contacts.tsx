@@ -1,9 +1,9 @@
 import type { CurriedOnChange } from "@/shared/utils";
 
-import { toPhoneNumber, PhonePrefix, InputPhone, Textarea, Button, Select, Input } from "@/shared/components";
-import { validateSignupDataField, validateProfileData, CountryMap, hasValues, equals } from "@/shared/utils";
-import { useVisibleTask$, component$, useContext, useSignal, $ } from "@builder.io/qwik";
+import { Button, Input, InputPhone, PhonePrefix, Select, Textarea, toPhoneNumber } from "@/shared/components";
 import { RootContext } from "@/shared/context";
+import { CountryMap, equals, hasValues, validateProfileData, validateSignupDataField } from "@/shared/utils";
+import { $, component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { cx } from "cva";
 
 import type { ProfileContactsFormFields } from "../../model";
@@ -111,10 +111,10 @@ export const ProfileContactsForm = component$(() => {
                 "md:min-w-[450px]",
                 "md:px-8 md:py-2",
             )}
-            onSubmit$={handleSubmit}
-            preventdefault:submit
             method="post"
             noValidate
+            onSubmit$={handleSubmit}
+            preventdefault:submit
         >
             <h2 class="my-0 text-brand-text dark:text-brand-dark-text">Edit profile contacts</h2>
             <hr class="my-2 h-px border-0 bg-gray-400 dark:bg-gray-700" />
@@ -124,109 +124,109 @@ export const ProfileContactsForm = component$(() => {
                         <InputPhone
                             errorText={state.validation.phone?.toString()}
                             id="profile-contacts-form-phone"
-                            onInput$={handleInput("phone")}
-                            prefix={phonePrefix.value}
-                            value={state.form.phone}
-                            placeholder="9998885566"
                             label="Phone"
-                            type="tel"
+                            onInput$={handleInput("phone")}
+                            placeholder="9998885566"
+                            prefix={phonePrefix.value}
                             required
+                            type="tel"
+                            value={state.form.phone}
                         />
                         <Input
                             errorText={state.validation.telegram?.toString()}
-                            placeholder="https://t.me/username"
                             id="profile-contacts-form-telegram"
-                            onInput$={handleInput("telegram")}
-                            value={state.form.telegram}
                             label="Telegram"
-                            type="text"
+                            onInput$={handleInput("telegram")}
+                            placeholder="https://t.me/username"
                             required
+                            type="text"
+                            value={state.form.telegram}
                         />
                         <Input
-                            placeholder="https://wa.me/message/your unique code"
                             errorText={state.validation.whatsapp?.toString()}
                             id="profile-contacts-form-whatsapp"
-                            onInput$={handleInput("whatsapp")}
-                            value={state.form.whatsapp}
                             label="Whatsapp"
-                            type="text"
+                            onInput$={handleInput("whatsapp")}
+                            placeholder="https://wa.me/message/your unique code"
                             required
+                            type="text"
+                            value={state.form.whatsapp}
                         />
                     </div>
                 </div>
                 <div class={cx("flex flex-col items-start basis-2/4", "justify-center gap-6 md:flex-row")}>
                     <div class="flex w-full flex-col pr-6 pt-4">
                         <Select
+                            disabled
+                            id="profile-contacts-form-country"
+                            label="Country"
                             options={Object.values(CountryMap).map((country) => ({
                                 value: country,
                             }))}
-                            id="profile-contacts-form-country"
-                            value={state.form.country}
                             placeholder="country"
-                            label="Country"
                             required
-                            disabled
+                            value={state.form.country}
                         />
                         <Input
                             errorText={state.validation.city?.toString()}
                             id="profile-contacts-form-city"
-                            onInput$={handleInput("city")}
-                            value={state.form.city}
-                            placeholder="city"
                             label="City"
-                            type="text"
+                            onInput$={handleInput("city")}
+                            placeholder="city"
                             required
+                            type="text"
+                            value={state.form.city}
                         />
                         <Input
                             errorText={state.validation.building?.toString()}
                             id="profile-contacts-form-building"
-                            onInput$={handleInput("building")}
-                            value={state.form.building}
-                            placeholder="building"
                             label="Building"
-                            type="text"
+                            onInput$={handleInput("building")}
+                            placeholder="building"
                             required
+                            type="text"
+                            value={state.form.building}
                         />
                         <Input
                             errorText={state.validation.apartment?.toString()}
                             id="profile-contacts-form-apartment"
-                            onInput$={handleInput("apartment")}
-                            value={state.form.apartment}
-                            placeholder="apartment"
                             label="Apartment"
-                            type="text"
+                            onInput$={handleInput("apartment")}
+                            placeholder="apartment"
                             required
+                            type="text"
+                            value={state.form.apartment}
                         />
                         <Input
                             errorText={state.validation.postalCode?.toString()}
                             id="profile-contacts-form-postal-code"
-                            onInput$={handleInput("postalCode")}
-                            value={state.form.postalCode}
-                            placeholder="postalCode"
                             label="Postal code"
-                            type="text"
+                            onInput$={handleInput("postalCode")}
+                            placeholder="postalCode"
                             required
+                            type="text"
+                            value={state.form.postalCode}
                         />
                         <Textarea
                             errorText={state.validation.street?.toString()}
                             id="profile-contacts-form-street"
-                            onInput$={handleInput("street")}
-                            value={state.form.street}
-                            placeholder="street"
                             label="Street"
+                            onInput$={handleInput("street")}
+                            placeholder="street"
                             required
+                            value={state.form.street}
                         />
                         <Button
                             classes={{
                                 button: cx("mt-2 w-48 ml-auto mr-0"),
                                 text: "font-bold",
                             }}
+                            color="primary"
                             disabled={!hasChanges.value}
                             isLoading={state.isLoading}
-                            color="primary"
-                            variant="fill"
-                            type="submit"
                             text="Submit"
+                            type="submit"
+                            variant="fill"
                         />
                         <p
                             class={cx("my-1 min-h-[48px] py-1 text-right", {

@@ -1,21 +1,21 @@
-import { component$, useContext } from "@builder.io/qwik";
-import { LuGithub, LuUsers } from "@qwikest/icons/lucide";
 import { Button, Chip } from "@/shared/components";
 import { RootContext } from "@/shared/context";
+import { component$, useContext } from "@builder.io/qwik";
+import { LuBadgeHelp, LuGithub, LuUsers } from "@qwikest/icons/lucide";
 import { cva, cx } from "cva";
 
 const icon = cva(["block h-4 w-4"], {
     variants: {
         color: {
-            success: ["stroke-brand-success"],
             error: ["stroke-brand-error"],
             normal: ["stroke-current"],
+            success: ["stroke-brand-success"],
         },
     },
 });
 
 export const Footer = component$(() => {
-    let { userCount } = useContext(RootContext);
+    let { requestCount, userCount } = useContext(RootContext);
 
     return (
         <footer class={cx("max-w-screen-xl mx-auto", "w-full h-footer min-h-footer", "flex flex-row items-center")}>
@@ -24,20 +24,25 @@ export const Footer = component$(() => {
                     <div class="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
                         <div class="flex flex-row items-center gap-1">
                             <LuUsers class={icon({ color: "success" })} />
-                            <span class="text-sm">user count:</span>
+                            <span class="text-sm">User count:</span>
                             <Chip class="ml-1">{userCount}</Chip>
+                        </div>
+                        <div class="flex flex-row items-center gap-1">
+                            <LuBadgeHelp class={icon({ color: "success" })} />
+                            <span class="text-sm">Request count:</span>
+                            <Chip class="ml-1">{requestCount}</Chip>
                         </div>
                     </div>
                 </div>
                 <div>
                     <Button
-                        href="https://github.com/iivanovw7/rust-solid-app"
-                        variant="transparent"
-                        color="tertiary"
-                        rel="noreferer"
-                        target="_blank"
-                        size="small"
                         as="link"
+                        color="tertiary"
+                        href="https://github.com/iivanovw7/rust-solid-app"
+                        rel="noreferer"
+                        size="small"
+                        target="_blank"
+                        variant="transparent"
                     >
                         <LuGithub class={icon({ color: "normal" })} />
                     </Button>

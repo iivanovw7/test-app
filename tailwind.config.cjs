@@ -3,46 +3,8 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-    theme: {
-        extend: {
-            colors: {
-                brand: {
-                    dark: {
-                        "hover-tertiary": colors.gray[800],
-                        "focus-ring": colors.blue[800],
-                        background: colors.stone[900],
-                        secondary: colors.violet[500],
-                        primary: colors.blue[700],
-                        outline: colors.gray[100],
-                        border: colors.gray[600],
-                        tertiary: "transparent",
-                        hover: colors.gray[800],
-                        text: colors.gray[100],
-                    },
-                    "hover-tertiary": colors.gray[300],
-                    "focus-ring": colors.blue[300],
-                    background: colors.stone[200],
-                    secondary: colors.violet[700],
-                    warning: colors.orange[500],
-                    success: colors.green[500],
-                    primary: colors.blue[600],
-                    outline: colors.gray[600],
-                    border: colors.gray[400],
-                    tertiary: "transparent",
-                    hover: colors.gray[300],
-                    error: colors.red[500],
-                    text: colors.gray[800],
-                },
-            },
-            spacing: {
-                footer: "80px",
-                header: "80px",
-            },
-            fontFamily: {
-                sans: ["Inconsolata", "sans-serif"],
-            },
-        },
-    },
+    content: ["./src/**/*.{astro,html,js,jsx,svelte,ts,tsx,vue}", "./node_modules/flowbite/**/*.js"],
+    darkMode: "class",
     plugins: [
         require("@tailwindcss/aspect-ratio"),
         require("@tailwindcss/typography"),
@@ -51,7 +13,48 @@ module.exports = {
         require("autoprefixer"),
         require("flowbite/plugin"),
     ],
-    content: ["./src/**/*.{astro,html,js,jsx,svelte,ts,tsx,vue}", "./node_modules/flowbite/**/*.js"],
-    darkMode: "class",
     safelist: [],
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    background: colors.stone[200],
+                    border: colors.gray[400],
+                    dark: {
+                        background: colors.stone[900],
+                        border: colors.gray[600],
+                        error: colors.red[500],
+                        "focus-ring": colors.blue[800],
+                        "focus-ring-error": colors.red[400],
+                        hover: colors.gray[800],
+                        "hover-tertiary": colors.gray[800],
+                        outline: colors.gray[100],
+                        primary: colors.blue[700],
+                        secondary: colors.violet[500],
+                        tertiary: "transparent",
+                        text: colors.gray[100],
+                    },
+                    error: colors.red[500],
+                    "focus-ring": colors.blue[300],
+                    "focus-ring-error": colors.red[400],
+                    hover: colors.gray[300],
+                    "hover-tertiary": colors.gray[300],
+                    outline: colors.gray[600],
+                    primary: colors.blue[600],
+                    secondary: colors.violet[700],
+                    success: colors.green[500],
+                    tertiary: "transparent",
+                    text: colors.gray[800],
+                    warning: colors.orange[500],
+                },
+            },
+            fontFamily: {
+                sans: ["Inconsolata", "sans-serif"],
+            },
+            spacing: {
+                footer: "80px",
+                header: "80px",
+            },
+        },
+    },
 };

@@ -14,11 +14,11 @@ export type TBasicApiResult<Data> = {
 };
 
 export type TBasicApiError = {
-    message: string;
     code: ErrorCode;
-    success: false;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any;
+    message: string;
+    success: false;
 };
 
 export type QueryUserCount = {
@@ -26,40 +26,40 @@ export type QueryUserCount = {
 };
 
 export type QueryUserContactsModel = {
+    phone: string;
     telegram?: string;
     whatsapp?: string;
-    phone: string;
 };
 
 export type QueryUserAddressModel = {
-    postalCode: string;
     apartment: string;
-    country: "Russia";
     building: string;
-    street: string;
     city: string;
+    country: "Russia";
+    postalCode: string;
+    street: string;
 };
 
 export type QueryUserModel = {
-    contacts: QueryUserContactsModel;
+    _id: ObjectId;
     address: QueryUserAddressModel;
+    contacts: QueryUserContactsModel;
     createdAt: string;
-    updatedAt: string;
+    email: string;
     firstName: string;
     lastName: string;
     password: string;
     role: UserRole;
-    email: string;
-    _id: ObjectId;
+    updatedAt: string;
 };
 
-export type QueryUser = Omit<QueryUserModel, "password" | "_id"> & {
+export type QueryUser = Omit<QueryUserModel, "_id" | "password"> & {
     id: string;
 };
 
-export type UserSignupData = Omit<QueryUserModel, "createdAt" | "updatedAt" | "contacts" | "address" | "role" | "_id"> &
-    Pick<QueryUserAddressModel, "postalCode" | "apartment" | "building" | "country" | "street" | "city"> &
-    Pick<QueryUserContactsModel, "telegram" | "whatsapp" | "phone">;
+export type UserSignupData = Omit<QueryUserModel, "_id" | "address" | "contacts" | "createdAt" | "role" | "updatedAt"> &
+    Pick<QueryUserAddressModel, "apartment" | "building" | "city" | "country" | "postalCode" | "street"> &
+    Pick<QueryUserContactsModel, "phone" | "telegram" | "whatsapp">;
 
 export type UserUpdateData = Partial<UserSignupData> & Partial<QueryUserContactsModel>;
 
@@ -71,18 +71,36 @@ export const UserRole = {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
 export type LoginData = {
-    password: string;
     email: string;
+    password: string;
 };
 
+export type QueryRequestModel = {
+    _id: ObjectId;
+    authorId: ObjectId;
+    avatarUrl: string;
+    createdAt: string;
+    description: string;
+    endsAt: string;
+    isHidden: boolean;
+    startsAt: string;
+    title: string;
+};
+
+export type QueryRequest = Omit<QueryRequestModel, "_id"> & {
+    id: string;
+};
+
+export type CreateRequestData = Omit<QueryRequestModel, "_id" | "authorId" | "createdAt">;
+
 export const ErrorCode = {
-    INVALID_REFRESH_TOKEN: 4002,
     INTERNAL_SERVER_ERROR: 5000,
-    VALIDATION_ERROR: 4006,
-    USER_NOT_FOUND: 4004,
-    WRONG_PASSWORD: 4003,
+    INVALID_REFRESH_TOKEN: 4002,
     UNAUTHORIZED: 4001,
     USER_EXISTS: 4005,
+    USER_NOT_FOUND: 4004,
+    VALIDATION_ERROR: 4006,
+    WRONG_PASSWORD: 4003,
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];

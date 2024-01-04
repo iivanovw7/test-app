@@ -6,6 +6,7 @@ import type { BasePath } from "../routes";
 
 export type RootState = {
     profile: Nullable<QueryUser>;
+    requestCount: number;
     userCount: number;
 };
 

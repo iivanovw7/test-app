@@ -1,13 +1,13 @@
 import type { CurriedOnChange } from "@/shared/utils";
 import type { UserSignupData } from "#/api";
 
-import { toPhoneNumber, PhonePrefix, InputPhone, Textarea, Button, Select, Input, Link } from "@/shared/components";
-import { validateSignupDataField, validateSignupData, CountryMap, hasValues } from "@/shared/utils";
-import { component$, useContext, useSignal, useTask$, $ } from "@builder.io/qwik";
+import { Button, Input, InputPhone, Link, PhonePrefix, Select, Textarea, toPhoneNumber } from "@/shared/components";
 import { RootContext } from "@/shared/context";
+import { CountryMap, hasValues, validateSignupData, validateSignupDataField } from "@/shared/utils";
+import { $, component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
 import { cx } from "cva";
 
-import { SignupFormContext, LoginContext, LoginType } from "../../model";
+import { LoginContext, LoginType, SignupFormContext } from "../../model";
 
 export type TSignupForm = UserSignupData;
 
@@ -90,23 +90,23 @@ export const SignupForm = component$(() => {
                 "md:min-w-[450px]",
                 "md:px-8 md:py-2",
             )}
-            onSubmit$={handleSubmit}
-            preventdefault:submit
             method="post"
             noValidate
+            onSubmit$={handleSubmit}
+            preventdefault:submit
         >
             <h2 class="my-0 text-brand-text dark:text-brand-dark-text">Create account</h2>
             <div class="flex flex-row items-center justify-between">
                 <Button
-                    onClick$={handleSigninClick}
-                    color="tertiary"
-                    variant="fill"
-                    size="x-small"
-                    type="button"
-                    text="Login"
                     as="button"
+                    color="tertiary"
+                    onClick$={handleSigninClick}
+                    size="x-small"
+                    text="Login"
+                    type="button"
+                    variant="fill"
                 />
-                <Link target="_self" text="Home" href="/" />
+                <Link href="/" target="_self" text="Home" />
             </div>
             <hr class="my-2 h-px border-0 bg-gray-400 dark:bg-gray-700" />
             <div class="flex flex-col items-start justify-center gap-6 md:flex-row">
@@ -114,117 +114,117 @@ export const SignupForm = component$(() => {
                     <h4 class="mt-3 text-brand-text dark:text-brand-dark-text">Profile</h4>
                     <Input
                         errorText={formState.validation.firstName?.toString()}
-                        onInput$={handleInput("firstName")}
-                        value={formState.form.firstName}
-                        placeholder="name"
                         id="signup-name"
                         label="Name"
-                        type="text"
+                        onInput$={handleInput("firstName")}
+                        placeholder="name"
                         required
+                        type="text"
+                        value={formState.form.firstName}
                     />
                     <Input
                         errorText={formState.validation.lastName?.toString()}
-                        onInput$={handleInput("lastName")}
-                        value={formState.form.lastName}
-                        placeholder="last name"
                         id="signup-last-name"
                         label="Last name"
-                        type="text"
+                        onInput$={handleInput("lastName")}
+                        placeholder="last name"
                         required
+                        type="text"
+                        value={formState.form.lastName}
                     />
                     <Input
                         errorText={formState.validation.email?.toString()}
-                        placeholder="name@flowbite.com"
-                        onInput$={handleInput("email")}
-                        value={formState.form.email}
                         id="signup-email"
                         label="Email"
-                        type="email"
+                        onInput$={handleInput("email")}
+                        placeholder="name@flowbite.com"
                         required
+                        type="email"
+                        value={formState.form.email}
                     />
                     <InputPhone
                         errorText={formState.validation.phone?.toString()}
-                        onInput$={handleInput("phone")}
-                        value={formState.form.phone}
-                        prefix={phonePrefix.value}
-                        placeholder="9998885566"
                         id="signup-phone"
                         label="Phone"
-                        type="tel"
+                        onInput$={handleInput("phone")}
+                        placeholder="9998885566"
+                        prefix={phonePrefix.value}
                         required
+                        type="tel"
+                        value={formState.form.phone}
                     />
                     <Input
                         errorText={formState.validation.password?.toString()}
-                        onInput$={handleInput("password")}
-                        value={formState.form.password}
-                        placeholder="password"
                         id="signup-password"
                         label="Password"
-                        type="password"
+                        onInput$={handleInput("password")}
+                        placeholder="password"
                         required
+                        type="password"
+                        value={formState.form.password}
                     />
                 </div>
                 <div class="flex w-full flex-col">
                     <h4 class="mt-3 text-brand-text dark:text-brand-dark-text">Address</h4>
                     <Select
+                        disabled
+                        id="signup-country"
+                        label="Country"
                         options={Object.values(CountryMap).map((country) => ({
                             value: country,
                         }))}
-                        value={formState.form.country}
                         placeholder="country"
-                        id="signup-country"
-                        label="Country"
                         required
-                        disabled
+                        value={formState.form.country}
                     />
                     <Input
                         errorText={formState.validation.city?.toString()}
-                        onInput$={handleInput("city")}
-                        value={formState.form.city}
-                        placeholder="city"
                         id="signup-city"
                         label="City"
-                        type="text"
+                        onInput$={handleInput("city")}
+                        placeholder="city"
                         required
+                        type="text"
+                        value={formState.form.city}
                     />
                     <Input
                         errorText={formState.validation.building?.toString()}
-                        onInput$={handleInput("building")}
-                        value={formState.form.building}
-                        placeholder="building"
                         id="signup-building"
                         label="Building"
-                        type="text"
+                        onInput$={handleInput("building")}
+                        placeholder="building"
                         required
+                        type="text"
+                        value={formState.form.building}
                     />
                     <Input
                         errorText={formState.validation.apartment?.toString()}
-                        onInput$={handleInput("apartment")}
-                        value={formState.form.apartment}
-                        placeholder="apartment"
                         id="signup-apartment"
                         label="Apartment"
-                        type="text"
+                        onInput$={handleInput("apartment")}
+                        placeholder="apartment"
                         required
+                        type="text"
+                        value={formState.form.apartment}
                     />
                     <Input
                         errorText={formState.validation.postalCode?.toString()}
-                        onInput$={handleInput("postalCode")}
-                        value={formState.form.postalCode}
-                        placeholder="postalCode"
                         id="signup-postal-code"
                         label="Postal code"
-                        type="text"
+                        onInput$={handleInput("postalCode")}
+                        placeholder="postalCode"
                         required
+                        type="text"
+                        value={formState.form.postalCode}
                     />
                     <Textarea
                         errorText={formState.validation.street?.toString()}
-                        onInput$={handleInput("street")}
-                        value={formState.form.street}
-                        placeholder="street"
                         id="signup-street"
                         label="Street"
+                        onInput$={handleInput("street")}
+                        placeholder="street"
                         required
+                        value={formState.form.street}
                     />
                 </div>
             </div>
@@ -233,11 +233,11 @@ export const SignupForm = component$(() => {
                     button: cx("mt-2 w-full", "md:ml-auto md:mr-0 md:w-[calc(50%-0.75rem)]"),
                     text: "font-bold",
                 }}
-                isLoading={state.isLoading}
                 color="primary"
-                variant="fill"
-                type="submit"
+                isLoading={state.isLoading}
                 text="Submit"
+                type="submit"
+                variant="fill"
             />
             <p class="my-1 min-h-[48px] py-1 text-right text-brand-warning">{state.errorMessage}</p>
         </form>

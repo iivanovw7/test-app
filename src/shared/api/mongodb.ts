@@ -9,9 +9,9 @@ declare global {
 }
 
 class Singleton {
-    private clientPromise: Promise<MongoClient>;
     private static _instance: Singleton;
     private client: MongoClient;
+    private clientPromise: Promise<MongoClient>;
 
     private constructor() {
         this.client = new MongoClient(URI, options);

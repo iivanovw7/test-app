@@ -1,6 +1,6 @@
 import { sequence } from "astro/middleware";
 
-import { validation } from "./validation";
 import { authorize } from "./authorize";
+import { validation } from "./validation";
 
 export const onRequest = sequence(authorize, validation);

@@ -1,13 +1,14 @@
 ---
 
 import MainLayout from "@/layouts/main-layout.astro";
-import { apiRoutes, routes } from "@/shared/routes";
 import { ACCESS_TOKEN_KEY } from "@/shared/api";
+import { apiRoutes, routes } from "@/shared/routes";
 import { Home } from "@/widgets";
 
 const { API_URL } = import.meta.env; 
 
 const usersCountResponse = await fetch(`${API_URL}/${apiRoutes.userCount.path}`);
+const requestsCountResponse = await fetch(`${API_URL}/${apiRoutes.requestCount.path}`);
 
 const profileResponse = await fetch(`${API_URL}/${apiRoutes.getMe.path}`, {
     headers: {
@@ -16,10 +17,11 @@ const profileResponse = await fetch(`${API_URL}/${apiRoutes.getMe.path}`, {
 });
 
 const userCount = await usersCountResponse.json();
+const requestCount = await requestsCountResponse.json();
 const profileResult = await profileResponse.json();
 
 ---
 
-<MainLayout slug={routes.home.path} description="Website" title="Home">
-    <Home profile={profileResult?.data} userCount={userCount?.data} slug={routes.home.path} />
+<MainLayout description="Website" slug={routes.home.path} title="Home">
+    <Home profile={profileResult?.data} requestCount={requestCount?.data} slug={routes.home.path} userCount={userCount?.data} />
 </MainLayout>

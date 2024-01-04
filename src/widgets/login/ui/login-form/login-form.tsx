@@ -1,13 +1,13 @@
 import type { CurriedOnChange } from "@/shared/utils";
 import type { LoginData } from "#/api";
 
-import { validateLoginDataField, validateLoginData, hasValues } from "@/shared/utils";
-import { useVisibleTask$, component$, useContext, $ } from "@builder.io/qwik";
 import { Button, Input, Link } from "@/shared/components";
 import { RootContext } from "@/shared/context";
+import { hasValues, validateLoginData, validateLoginDataField } from "@/shared/utils";
+import { $, component$, useContext, useVisibleTask$ } from "@builder.io/qwik";
 import { cx } from "cva";
 
-import { LoginFormContext, LoginContext, LoginType } from "../../model";
+import { LoginContext, LoginFormContext, LoginType } from "../../model";
 
 export const LoginForm = component$(() => {
     let rootStore = useContext(RootContext);
@@ -68,52 +68,52 @@ export const LoginForm = component$(() => {
                 "md:min-w-[450px]",
                 "md:px-6 md:py-6",
             )}
-            onSubmit$={handleSubmit}
-            preventdefault:submit
             method="post"
             noValidate
+            onSubmit$={handleSubmit}
+            preventdefault:submit
         >
             <h2 class="my-0 text-brand-text dark:text-brand-dark-text">Login</h2>
             <div class="flex flex-row items-center justify-between">
                 <Button
-                    onClick$={handleSignupClick}
-                    text="Create account"
-                    color="tertiary"
-                    variant="fill"
-                    size="x-small"
-                    type="button"
                     as="button"
+                    color="tertiary"
+                    onClick$={handleSignupClick}
+                    size="x-small"
+                    text="Create account"
+                    type="button"
+                    variant="fill"
                 />
-                <Link target="_self" text="Home" href="/" />
+                <Link href="/" target="_self" text="Home" />
             </div>
             <hr class="mb-6 mt-2 h-px border-0 bg-gray-400 dark:bg-gray-700" />
             <Input
                 errorText={loginFormState.validation.email?.toString()}
-                value={loginFormState.form.email}
-                placeholder="name@flowbite.com"
-                onInput$={handleInput("email")}
                 id="login-email"
                 label="Email"
-                type="email"
+                onInput$={handleInput("email")}
+                placeholder="name@flowbite.com"
                 required
+                type="email"
+                value={loginFormState.form.email}
             />
             <Input
                 errorText={loginFormState.validation.password?.toString()}
-                value={loginFormState.form.password}
-                onInput$={handleInput("password")}
-                placeholder="password"
                 id="login-password"
                 label="Password"
-                type="password"
+                onInput$={handleInput("password")}
+                placeholder="password"
                 required
+                type="password"
+                value={loginFormState.form.password}
             />
             <Button
-                classes={{ text: "font-bold", button: "mt-2" }}
-                isLoading={loginStore.isLoading}
+                classes={{ button: "mt-2", text: "font-bold" }}
                 color="primary"
-                variant="fill"
-                type="submit"
+                isLoading={loginStore.isLoading}
                 text="Submit"
+                type="submit"
+                variant="fill"
             />
             <p class="my-1 min-h-[48px] py-1 text-brand-warning">{loginStore.errorMessage}</p>
         </form>

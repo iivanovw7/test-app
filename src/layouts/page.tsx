@@ -7,10 +7,10 @@ import { Providers } from "./providers";
 export type PageLayoutProperties = ProvidersProperties;
 
 export const PageLayout = component$<PageLayoutProperties>((properties) => {
-    let { userCount, profile, slug } = properties;
+    let { profile, requestCount, slug, userCount } = properties;
 
     return (
-        <Providers userCount={userCount} profile={profile} slug={slug}>
+        <Providers profile={profile} requestCount={requestCount} slug={slug} userCount={userCount}>
             <Slot />
         </Providers>
     );

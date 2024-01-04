@@ -1,25 +1,85 @@
-import type { TBasicApiResult, QueryUserCount, QueryUserModel } from "#/api";
+import type { QueryUserCount, QueryUserModel, TBasicApiResult } from "#/api";
 
-import { HttpStatus } from "#/http";
 import { ErrorCode } from "#/api";
-import { jwtVerify } from "jose";
+import { HttpStatus } from "#/http";
 import dayjs from "dayjs";
+import { jwtVerify } from "jose";
 
+import clientPromise from "../mongodb";
 import {
-    ACCESS_TOKEN_SECRET,
-    issueRefreshToken,
     ACCESS_TOKEN_KEY,
-    issueAccessToken,
+    ACCESS_TOKEN_SECRET,
     cleanTokens,
     DB_NAME,
+    issueAccessToken,
+    issueRefreshToken,
     Result,
 } from "../utils";
-import clientPromise from "../mongodb";
 
 export type TQueryUserCountResult = TBasicApiResult<QueryUserCount>;
 
 export const UserService = {
-    updateMe: async ({ request, cookies }) => {
+    count: async () => {
+        try {
+            let client = await clientPromise;
+            let collection = client.db(DB_NAME).collection("users");
+            let count: number = await collection.countDocuments();
+
+            return Result.successResponse({
+                data: count,
+            });
+        } catch (error) {
+            return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
+                code: ErrorCode.INTERNAL_SERVER_ERROR,
+                error,
+                message: error.message,
+            });
+        }
+    },
+    getMe: async ({ cookies, request }) => {
+        let accessToken = request.headers.get(ACCESS_TOKEN_KEY) || cookies.get(ACCESS_TOKEN_KEY)?.value;
+
+        if (!accessToken) {
+            cleanTokens(cookies);
+
+            return Result.errorResponse(HttpStatus.UNAUTHORIZED, {
+                code: ErrorCode.UNAUTHORIZED,
+                message: "Unauthorized",
+            });
+        }
+
+        try {
+            let result = (await jwtVerify(accessToken, ACCESS_TOKEN_SECRET)) as AnyObject;
+            let client = await clientPromise;
+            let collection = client.db(DB_NAME).collection("users");
+
+            let user = await collection.findOne<QueryUserModel>({ email: result.payload.email });
+
+            if (!user) {
+                cleanTokens(cookies);
+
+                return Result.errorResponse(HttpStatus.NOT_FOUND, {
+                    code: ErrorCode.USER_NOT_FOUND,
+                    message: "User not found",
+                });
+            }
+
+            let { _id, password, ...restUser } = user;
+
+            return Result.successResponse({
+                data: { id: _id.toString(), ...restUser },
+            });
+        } catch (error) {
+            cleanTokens(cookies);
+
+            return Result.errorResponse(HttpStatus.UNAUTHORIZED, {
+                code: ErrorCode.UNAUTHORIZED,
+                error,
+                message: "Unauthorized",
+            });
+        }
+    },
+    updateMe: async ({ cookies, request }) => {
         let accessToken = request.headers.get(ACCESS_TOKEN_KEY) || cookies.get(ACCESS_TOKEN_KEY)?.value;
 
         if (!accessToken) {
@@ -53,24 +113,24 @@ export const UserService = {
                 {
                     $set: {
                         address: {
-                            postalCode: body.postalCode || user.address.postalCode,
                             apartment: body.apartment || user.address.apartment,
                             building: body.building || user.address.building,
-                            country: body.country || user.address.country,
-                            street: body.street || user.address.street,
                             city: body.city || user.address.city,
+                            country: body.country || user.address.country,
+                            postalCode: body.postalCode || user.address.postalCode,
+                            street: body.street || user.address.street,
                         },
                         contacts: {
+                            phone: body.phone || user.contacts.phone,
                             telegram: body.telegram || user.contacts.telegram,
                             whatsapp: body.whatsapp || user.contacts.whatsapp,
-                            phone: body.phone || user.contacts.phone,
                         },
+                        createdAt: user.createdAt,
+                        email: body.email || user.email,
                         firstName: body.firstName || user.firstName,
                         lastName: body.lastName || user.lastName,
-                        email: body.email || user.email,
-                        updatedAt: dayjs().valueOf(),
-                        createdAt: user.createdAt,
                         password: user.password,
+                        updatedAt: dayjs().valueOf(),
                     },
                 },
                 { upsert: false },
@@ -78,8 +138,8 @@ export const UserService = {
 
             if (modifiedCount === 0) {
                 return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
-                    message: `User ${user._id.toString()} was not found`,
                     code: ErrorCode.USER_NOT_FOUND,
+                    message: `User ${user._id.toString()} was not found`,
                 });
             }
 
@@ -89,7 +149,7 @@ export const UserService = {
                 await issueAccessToken(cookies, updatedUser.email);
                 await issueRefreshToken(cookies, updatedUser.email);
 
-                let { password, _id, ...restUser } = updatedUser;
+                let { _id, password, ...restUser } = updatedUser;
 
                 return Result.successResponse({
                     data: { id: _id.toString(), ...restUser },
@@ -103,68 +163,8 @@ export const UserService = {
         } catch (error) {
             return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
                 code: ErrorCode.INTERNAL_SERVER_ERROR,
+                error,
                 message: error.message,
-                error,
-            });
-        }
-    },
-    getMe: async ({ request, cookies }) => {
-        let accessToken = request.headers.get(ACCESS_TOKEN_KEY) || cookies.get(ACCESS_TOKEN_KEY)?.value;
-
-        if (!accessToken) {
-            cleanTokens(cookies);
-
-            return Result.errorResponse(HttpStatus.UNAUTHORIZED, {
-                code: ErrorCode.UNAUTHORIZED,
-                message: "Unauthorized",
-            });
-        }
-
-        try {
-            let result = (await jwtVerify(accessToken, ACCESS_TOKEN_SECRET)) as AnyObject;
-            let client = await clientPromise;
-            let collection = client.db(DB_NAME).collection("users");
-
-            let user = await collection.findOne<QueryUserModel>({ email: result.payload.email });
-
-            if (!user) {
-                cleanTokens(cookies);
-
-                return Result.errorResponse(HttpStatus.NOT_FOUND, {
-                    code: ErrorCode.USER_NOT_FOUND,
-                    message: "User not found",
-                });
-            }
-
-            let { password, _id, ...restUser } = user;
-
-            return Result.successResponse({
-                data: { id: _id.toString(), ...restUser },
-            });
-        } catch (error) {
-            cleanTokens(cookies);
-
-            return Result.errorResponse(HttpStatus.UNAUTHORIZED, {
-                code: ErrorCode.UNAUTHORIZED,
-                message: "Unauthorized",
-                error,
-            });
-        }
-    },
-    count: async () => {
-        try {
-            let client = await clientPromise;
-            let collection = client.db(DB_NAME).collection("users");
-            let count: number = await collection.countDocuments();
-
-            return Result.successResponse({
-                data: count,
-            });
-        } catch (error) {
-            return Result.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, {
-                code: ErrorCode.INTERNAL_SERVER_ERROR,
-                message: error.message,
-                error,
             });
         }
     },

@@ -1,32 +1,32 @@
-import type { MiddlewareNext, APIContext } from "astro";
+import type { APIContext, MiddlewareNext } from "astro";
 
-import { validateSignupData, validateLoginData, hasValues, clone } from "@/shared/utils";
-import { HttpStatus } from "#/http";
+import { clone, hasValues, validateLoginData, validateSignupData } from "@/shared/utils";
 import { ErrorCode } from "#/api";
+import { HttpStatus } from "#/http";
 
 import { Result } from "../utils";
 
 export const AuthValidation = {
-    updateMe: async (context: APIContext, next: MiddlewareNext) => {
+    login: async (context: APIContext, next: MiddlewareNext) => {
         let { request } = context;
 
-        if (request.method === "PATCH") {
+        if (request.method === "POST") {
             try {
                 let body = await clone(context.request).json();
-                let validationResult = validateSignupData(body);
+                let validationResult = validateLoginData(body);
 
                 if (hasValues(validationResult)) {
                     return Result.errorResponse(HttpStatus.BAD_REQUEST, {
                         code: ErrorCode.VALIDATION_ERROR,
-                        message: "Validation error",
                         error: validationResult,
+                        message: "Validation error",
                     });
                 }
             } catch (error) {
                 return Result.errorResponse(HttpStatus.BAD_REQUEST, {
                     code: ErrorCode.VALIDATION_ERROR,
-                    message: "Validation error",
                     error,
+                    message: "Validation error",
                 });
             }
         }
@@ -44,41 +44,41 @@ export const AuthValidation = {
                 if (hasValues(validationResult)) {
                     return Result.errorResponse(HttpStatus.BAD_REQUEST, {
                         code: ErrorCode.VALIDATION_ERROR,
-                        message: "Validation error",
                         error: validationResult,
+                        message: "Validation error",
                     });
                 }
             } catch (error) {
                 return Result.errorResponse(HttpStatus.BAD_REQUEST, {
                     code: ErrorCode.VALIDATION_ERROR,
-                    message: "Validation error",
                     error,
+                    message: "Validation error",
                 });
             }
         }
 
         return next();
     },
-    login: async (context: APIContext, next: MiddlewareNext) => {
+    updateMe: async (context: APIContext, next: MiddlewareNext) => {
         let { request } = context;
 
-        if (request.method === "POST") {
+        if (request.method === "PATCH") {
             try {
                 let body = await clone(context.request).json();
-                let validationResult = validateLoginData(body);
+                let validationResult = validateSignupData(body);
 
                 if (hasValues(validationResult)) {
                     return Result.errorResponse(HttpStatus.BAD_REQUEST, {
                         code: ErrorCode.VALIDATION_ERROR,
-                        message: "Validation error",
                         error: validationResult,
+                        message: "Validation error",
                     });
                 }
             } catch (error) {
                 return Result.errorResponse(HttpStatus.BAD_REQUEST, {
                     code: ErrorCode.VALIDATION_ERROR,
-                    message: "Validation error",
                     error,
+                    message: "Validation error",
                 });
             }
         }

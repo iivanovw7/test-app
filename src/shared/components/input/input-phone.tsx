@@ -1,20 +1,20 @@
 import type { InputHTMLAttributes } from "@builder.io/qwik";
 
-import { useVisibleTask$, component$, useSignal } from "@builder.io/qwik";
 import { CountryMap } from "@/shared/utils";
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { cx } from "cva";
 
 export type InputPhoneProperties = InputHTMLAttributes<HTMLInputElement> & {
     classes?: Partial<{
-        container: string;
         button: string;
-        label: string;
-        input: string;
+        container: string;
         form: string;
+        input: string;
+        label: string;
     }>;
     errorText?: Nullable<string>;
-    prefix?: string;
     label?: string;
+    prefix?: string;
 };
 
 export const PhonePrefix = {
@@ -32,7 +32,7 @@ export const toPhoneNumber = (value = "") => {
 };
 
 export const InputPhone = component$<InputPhoneProperties>((properties) => {
-    let { classes = {}, errorText, prefix, label, id, ...restProperties } = properties;
+    let { classes = {}, errorText, id, label, prefix, ...restProperties } = properties;
 
     let hasError = useSignal(!!errorText?.length);
 
@@ -63,8 +63,8 @@ export const InputPhone = component$<InputPhoneProperties>((properties) => {
                             "dark:focus:ring-brand-dark-focus-ring",
                             classes.button,
                         )}
-                        type="button"
                         disabled
+                        type="button"
                     >
                         {prefix}
                     </button>

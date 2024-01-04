@@ -1,18 +1,18 @@
 /* eslint-disable camelcase */
-import type { UserSignupData, LoginData } from "#/api";
+import type { LoginData, UserSignupData } from "#/api";
 
-import { PostalCodeValidatorPattern, PhoneValidatorPattern, validateSchema, validateField, z } from "../utils";
 import { CountryMap } from "../contry-map";
+import { PhoneValidatorPattern, PostalCodeValidatorPattern, validateField, validateSchema, z } from "../utils";
 
 export const loginDataValidationSchema = z.object({
+    email: z.string({ required_error: "Invalid email" }).trim().email({
+        message: "Invalid email",
+    }),
     password: z
         .string({ required_error: "Password is required" })
         .min(4, { message: "Password length must be at least 4 characters long" })
         .max(60, { message: "Password length must be at most 60 characters long" })
         .trim(),
-    email: z.string({ required_error: "Invalid email" }).trim().email({
-        message: "Invalid email",
-    }),
 });
 
 export const validateLoginDataField = <Key extends keyof LoginData>(key: Key, value: LoginData[Key]) => {
@@ -38,18 +38,18 @@ export const getAddressValidationSchema = (code: CountryMap) => {
 
 export const getContactValidationSchema = (code: CountryMap) => {
     return z.object({
-        postalCode: z
-            .string({ required_error: "Postal code is required" })
-            .regex(PostalCodeValidatorPattern[code], { message: "Invalid postal code" })
-            .trim(),
         apartment: z
             .string({ required_error: "Apartment is required" })
             .min(1, { message: "Apartment length must be at least 1 character long" })
             .trim(),
         building: z.string({}),
-        country: z.string({}),
-        street: z.string({}),
         city: z.string({}),
+        country: z.string({}),
+        postalCode: z
+            .string({ required_error: "Postal code is required" })
+            .regex(PostalCodeValidatorPattern[code], { message: "Invalid postal code" })
+            .trim(),
+        street: z.string({}),
     });
 };
 

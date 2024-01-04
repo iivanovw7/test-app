@@ -1,43 +1,40 @@
 import type { LoginData } from "#/api";
 
-import { createContextId, useStore, $ } from "@builder.io/qwik";
+import { $, createContextId, useStore } from "@builder.io/qwik";
 
 export type LoginFormValidation = {
-    password: Nullable<string>;
     email: Nullable<string>;
+    password: Nullable<string>;
 };
 
 export type LoginFormState = {
-    setValidationVield: <Key extends keyof LoginFormValidation>(field: Key, value: LoginFormValidation[Key]) => void;
+    form: LoginData;
+    resetValidation: () => void;
     setFormField: <Key extends keyof LoginData>(field: Key, value: LoginData[Key]) => void;
     setValidation: (validation: LoginFormValidation) => void;
     setValidationEnabled: (isEnabled: boolean) => void;
+    setValidationVield: <Key extends keyof LoginFormValidation>(field: Key, value: LoginFormValidation[Key]) => void;
     validation: LoginFormValidation;
-    resetValidation: () => void;
     validationEnabled: boolean;
-    form: LoginData;
 };
 
 export const LOGIN_INITIAL_FORM_STATE: LoginData = {
-    password: "",
     email: "",
+    password: "",
 };
 
 export const LOGIN_INITIAL_VALIDATION_STATE: LoginFormValidation = {
-    password: null,
     email: null,
+    password: null,
 };
 
 export const LoginFormContext = createContextId<LoginFormState>("login-form-context");
 
 export const useLoginFormState = () => {
     return useStore<LoginFormState>({
-        setValidationVield: $(function <Key extends keyof LoginFormValidation>(
-            this: LoginFormState,
-            field: Key,
-            value: LoginFormValidation[Key],
-        ) {
-            this.validation[field] = value;
+        form: LOGIN_INITIAL_FORM_STATE,
+        resetValidation: $(function (this: LoginFormState) {
+            this.validation = LOGIN_INITIAL_VALIDATION_STATE;
         }),
         setFormField: $(function <Key extends keyof LoginData>(
             this: LoginFormState,
@@ -52,11 +49,14 @@ export const useLoginFormState = () => {
         setValidationEnabled: $(function (this: LoginFormState, isEnabled: boolean) {
             this.validationEnabled = isEnabled;
         }),
-        resetValidation: $(function (this: LoginFormState) {
-            this.validation = LOGIN_INITIAL_VALIDATION_STATE;
+        setValidationVield: $(function <Key extends keyof LoginFormValidation>(
+            this: LoginFormState,
+            field: Key,
+            value: LoginFormValidation[Key],
+        ) {
+            this.validation[field] = value;
         }),
         validation: LOGIN_INITIAL_VALIDATION_STATE,
-        form: LOGIN_INITIAL_FORM_STATE,
         validationEnabled: false,
     });
 };

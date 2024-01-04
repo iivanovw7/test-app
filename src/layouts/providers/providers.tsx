@@ -1,28 +1,30 @@
 import type { LocationState, RootState } from "@/shared/context";
 import type { QueryUser } from "#/api";
 
-import { useContextProvider, useVisibleTask$, component$, useStore, Slot, $ } from "@builder.io/qwik";
-import { MILLISECONDS_IN_MINUTE, defaultTo } from "@/shared/utils";
 import { LocationContext, RootContext } from "@/shared/context";
 import { apiRoutes, BasePath } from "@/shared/routes";
+import { defaultTo, MILLISECONDS_IN_MINUTE } from "@/shared/utils";
+import { $, component$, Slot, useContextProvider, useStore, useVisibleTask$ } from "@builder.io/qwik";
 import { initFlowbite } from "flowbite";
 
 export type ProvidersProperties = {
     profile?: QueryUser;
-    userCount?: number;
+    requestCount?: number;
     slug: BasePath;
+    userCount?: number;
 };
 
 export const Providers = component$<ProvidersProperties>((properties) => {
-    let { userCount, profile, slug } = properties;
+    let { profile, requestCount, slug, userCount } = properties;
 
     let locationStore = useStore<LocationState>({
         slug: defaultTo(BasePath.home, slug),
     });
 
     let rootStore = useStore<RootState>({
-        userCount: defaultTo(0, userCount),
         profile: defaultTo(null, profile),
+        requestCount: defaultTo(0, requestCount),
+        userCount: defaultTo(0, userCount),
     });
 
     let refreshToken = $(async () => {

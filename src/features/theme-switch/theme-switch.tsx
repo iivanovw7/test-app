@@ -1,6 +1,6 @@
-import { component$, useSignal, $ } from "@builder.io/qwik";
-import { LuMoon, LuSun } from "@qwikest/icons/lucide";
 import { Button } from "@/shared/components";
+import { $, component$, useSignal } from "@builder.io/qwik";
+import { LuMoon, LuSun } from "@qwikest/icons/lucide";
 
 const LIGHT_CLASS = "theme-toggle-light-icon";
 const DARK_CLASS = "theme-toggle-dark-icon";
@@ -55,21 +55,21 @@ export const ThemeSwitch = component$<ThemeSwitchProperties>((properties) => {
     return (
         <Button
             classes={{ button: properties.class }}
-            onClick$={handleClick}
-            variant="transparent"
             color="tertiary"
-            type="button"
+            onClick$={handleClick}
             size="medium"
+            type="button"
+            variant="transparent"
         >
             <LuMoon
                 class={`${DARK_CLASS} hidden w-4 outline-none`}
-                ref={themeToggleDarkIconReference}
                 fill="currentColor"
+                ref={themeToggleDarkIconReference}
             />
             <LuSun
                 class={`${LIGHT_CLASS} h-4 w-4 outline-none`}
-                ref={themeToggleLightIconReference}
                 fill="currentColor"
+                ref={themeToggleLightIconReference}
             />
         </Button>
     );

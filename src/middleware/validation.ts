@@ -1,6 +1,6 @@
-import { defineMiddleware } from "astro/middleware";
-import { AuthValidation } from "@/shared/api";
+import { AuthValidation, RequestsValidation } from "@/shared/api";
 import { apiRoutes } from "@/shared/routes";
+import { defineMiddleware } from "astro/middleware";
 
 export const validation = defineMiddleware(async (context, next) => {
     let { pathname } = context.url;
@@ -14,6 +14,9 @@ export const validation = defineMiddleware(async (context, next) => {
         }
         case apiRoutes.updateMe.path: {
             return AuthValidation.updateMe(context, next);
+        }
+        case apiRoutes.createRequest.path: {
+            return RequestsValidation.create(context, next);
         }
         default: {
             return next();

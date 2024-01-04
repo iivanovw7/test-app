@@ -1,11 +1,11 @@
 import type { CurriedOnChange } from "@/shared/utils";
 
-import { validateSignupDataField, validateProfileData, hasValues, equals } from "@/shared/utils";
-import { useVisibleTask$, component$, useContext, useSignal, $ } from "@builder.io/qwik";
 import { Button, Input } from "@/shared/components";
 import { RootContext } from "@/shared/context";
-import dayjs from "dayjs";
+import { equals, hasValues, validateProfileData, validateSignupDataField } from "@/shared/utils";
+import { $, component$, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { cx } from "cva";
+import dayjs from "dayjs";
 
 import type { ProfileFormFields } from "../../model";
 
@@ -76,10 +76,10 @@ export const ProfileForm = component$(() => {
                 "md:min-w-[450px]",
                 "md:px-8 md:py-2",
             )}
-            onSubmit$={handleSubmit}
-            preventdefault:submit
             method="post"
             noValidate
+            onSubmit$={handleSubmit}
+            preventdefault:submit
         >
             <h2 class="my-0 text-brand-text dark:text-brand-dark-text">Edit profile</h2>
             <hr class="my-2 h-px border-0 bg-gray-400 dark:bg-gray-700" />
@@ -88,35 +88,35 @@ export const ProfileForm = component$(() => {
                     <div class="flex w-full flex-col pr-6 pt-4">
                         <Input
                             errorText={state.validation.firstName?.toString()}
-                            onInput$={handleInput("firstName")}
-                            value={state.form.firstName}
-                            placeholder="name"
                             id="signup-name"
                             label="Name"
-                            type="text"
+                            onInput$={handleInput("firstName")}
+                            placeholder="name"
                             required
+                            type="text"
+                            value={state.form.firstName}
                         />
                         <Input
                             errorText={state.validation.lastName?.toString()}
-                            onInput$={handleInput("lastName")}
-                            value={state.form.lastName}
-                            placeholder="last name"
                             id="signup-last-name"
                             label="Last name"
-                            type="text"
+                            onInput$={handleInput("lastName")}
+                            placeholder="last name"
                             required
+                            type="text"
+                            value={state.form.lastName}
                         />
                         <Button
                             classes={{
                                 button: cx("mt-2 w-48 ml-auto mr-0"),
                                 text: "font-bold",
                             }}
+                            color="primary"
                             disabled={!hasChanges.value}
                             isLoading={state.isLoading}
-                            color="primary"
-                            variant="fill"
-                            type="submit"
                             text="Submit"
+                            type="submit"
+                            variant="fill"
                         />
                         <p
                             class={cx("my-1 min-h-[48px] py-1 text-right", {

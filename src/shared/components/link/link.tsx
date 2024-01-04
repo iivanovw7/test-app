@@ -4,13 +4,13 @@ import { component$, Slot } from "@builder.io/qwik";
 import { cx } from "cva";
 
 export type LinkProperties = AnchorHTMLAttributes<HTMLAnchorElement> & {
+    text?: string;
     /** @default "never" */
     underline?: "always" | "hover" | "never";
-    text?: string;
 };
 
 export const Link = component$<LinkProperties>((properties) => {
-    let { underline = "never", text, ...linkProperties } = properties;
+    let { text, underline = "never", ...linkProperties } = properties;
 
     return (
         <a
