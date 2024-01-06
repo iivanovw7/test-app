@@ -1,14 +1,26 @@
 import type { ProvidersProperties } from "@/layouts/providers";
+import type { QueryRequest } from "#/api";
 
 import { Footer, Header } from "@/entities";
 import { PageLayout } from "@/layouts/page";
-import { component$ } from "@builder.io/qwik";
+import { component$, useContextProvider } from "@builder.io/qwik";
 import { cx } from "cva";
+import dayjs from "dayjs";
 
-export type HomeProperties = ProvidersProperties;
+import type { HomeState } from "./model";
+
+import { HomeContext, useHomeState } from "./model";
+
+export type HomeProperties = ProvidersProperties & {
+    requests?: QueryRequest[];
+};
 
 export const Home = component$<HomeProperties>((properties) => {
-    let { profile, requestCount, slug, userCount } = properties;
+    let { profile, requestCount, requests, slug, userCount } = properties;
+
+    let homeStore = useHomeState();
+
+    useContextProvider<HomeState>(HomeContext, homeStore);
 
     return (
         <PageLayout profile={profile} requestCount={requestCount} slug={slug} userCount={userCount}>
@@ -29,6 +41,53 @@ export const Home = component$<HomeProperties>((properties) => {
                                 <h2 class="mt-1 font-semibold text-brand-text dark:text-brand-dark-text">
                                     Description
                                 </h2>
+                                <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                                    {requests?.map((element) => (
+                                        <div
+                                            class={cx(
+                                                "w-full rounded-lg border border-stone-200",
+                                                "bg-white p-6 shadow dark:border-stone-700 dark:bg-stone-800",
+                                            )}
+                                            key={element.id}
+                                        >
+                                            <h5
+                                                class={cx(
+                                                    "mb-0 text-2xl font-bold tracking-tight",
+                                                    "text-gray-900 dark:text-white",
+                                                )}
+                                            >
+                                                {element.title}
+                                            </h5>
+                                            <p class={cx("mt-1 mb-3 font-normal", "text-gray-700 dark:text-gray-400")}>
+                                                {element.description || "No description"}
+                                            </p>
+                                            <div class="flex items-center">
+                                                <span class="text-md me-1 font-normal text-gray-500 dark:text-gray-400">
+                                                    Created at:
+                                                </span>
+                                                <span class="pl-2 text-brand-text dark:text-brand-dark-text">
+                                                    {dayjs(element.createdAt).format("hh:mm MMM DD, YYYY")}
+                                                </span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <span class="text-md me-1 font-normal text-gray-500 dark:text-gray-400">
+                                                    Starts at:
+                                                </span>
+                                                <span class="pl-2 text-brand-text dark:text-brand-dark-text">
+                                                    {dayjs(element.startsAt).format("hh:mm MMM DD, YYYY")}
+                                                </span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <span class="text-md me-1 font-normal text-gray-500 dark:text-gray-400">
+                                                    Ends at:
+                                                </span>
+                                                <span class="pl-2 text-brand-text dark:text-brand-dark-text">
+                                                    {dayjs(element.endsAt).format("hh:mm MMM DD, YYYY")}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                                 <p class="mt-4">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque suscipit, orci
                                     non vulputate porta, sem erat lacinia sem, ac tincidunt nibh turpis a turpis.

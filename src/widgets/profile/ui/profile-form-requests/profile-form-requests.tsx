@@ -46,7 +46,9 @@ export const ProfileRequestsForm = component$(() => {
     });
 
     useVisibleTask$(() => {
-        state.getMyRequests();
+        if (rootStore.profile) {
+            state.getRequests(rootStore.profile.id);
+        }
     });
 
     let handleSubmit = $(async () => {
@@ -76,7 +78,9 @@ export const ProfileRequestsForm = component$(() => {
             state.form.endsAt = state.initialForm.endsAt = "";
         }
 
-        await state.getMyRequests();
+        if (rootStore.profile) {
+            await state.getRequests(rootStore.profile.id);
+        }
     });
 
     let handleInput: CurriedOnChange<keyof ProfileRequestFormFields> = (key) => {
@@ -184,54 +188,56 @@ export const ProfileRequestsForm = component$(() => {
                     </div>
                 </div>
             </form>
-            <div
-                class={cx(
-                    "px-4 py-0 m-0",
-                    "relative overflow-x-auto rounded",
-                    "text-brand-text dark:text-brand-dark-text",
-                    "md:px-8 md:py-2",
-                )}
-            >
-                <table class="mt-0 w-full text-left text-sm rtl:text-right">
-                    <thead class="text-xs uppercase">
-                        <tr>
-                            <th class="p-2 font-bold text-brand-text dark:text-brand-dark-text" scope="col">
-                                Title
-                            </th>
-                            <th class="p-2 font-bold text-brand-text dark:text-brand-dark-text" scope="col">
-                                Description
-                            </th>
-                            <th class="p-2 font-bold text-brand-text dark:text-brand-dark-text" scope="col">
-                                Start date
-                            </th>
-                            <th class="p-2 font-bold text-brand-text dark:text-brand-dark-text" scope="col">
-                                End date
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {state.myRequests.map((row) => (
-                            <tr class="border-b border-gray-300 dark:border-gray-700" key={row.id}>
-                                <th class="whitespace-nowrap p-2" scope="row">
-                                    {row.title}
+            {!!state.myRequests.length && (
+                <div
+                    class={cx(
+                        "px-4 py-0 m-0",
+                        "relative overflow-x-auto rounded",
+                        "text-brand-text dark:text-brand-dark-text",
+                        "md:px-8 md:py-2",
+                    )}
+                >
+                    <table class="mt-0 w-full text-left text-sm rtl:text-right">
+                        <thead class="text-xs uppercase">
+                            <tr>
+                                <th class="p-2 font-bold text-brand-text dark:text-brand-dark-text" scope="col">
+                                    Title
                                 </th>
-                                <td class="whitespace-nowrap p-2">{row.description}</td>
-                                <td class="p-2">{dayjs(row.startsAt).format("MMM DD, YYYY")}</td>
-                                <td class="p-2">{dayjs(row.endsAt).format("MMM DD, YYYY")}</td>
-                                <td class="p-2">
-                                    <Button
-                                        color="error"
-                                        onClick$={handleDeleteClick(row.id)}
-                                        size="x-small"
-                                        text="Delete"
-                                        variant="fill"
-                                    />
-                                </td>
+                                <th class="p-2 font-bold text-brand-text dark:text-brand-dark-text" scope="col">
+                                    Description
+                                </th>
+                                <th class="p-2 font-bold text-brand-text dark:text-brand-dark-text" scope="col">
+                                    Start date
+                                </th>
+                                <th class="p-2 font-bold text-brand-text dark:text-brand-dark-text" scope="col">
+                                    End date
+                                </th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {state.myRequests.map((row) => (
+                                <tr class="border-b border-gray-300 dark:border-gray-700" key={row.id}>
+                                    <th class="whitespace-nowrap p-2" scope="row">
+                                        {row.title}
+                                    </th>
+                                    <td class="whitespace-nowrap p-2">{row.description}</td>
+                                    <td class="p-2">{dayjs(row.startsAt).format("MMM DD, YYYY")}</td>
+                                    <td class="p-2">{dayjs(row.endsAt).format("MMM DD, YYYY")}</td>
+                                    <td class="p-2">
+                                        <Button
+                                            color="error"
+                                            onClick$={handleDeleteClick(row.id)}
+                                            size="x-small"
+                                            text="Delete"
+                                            variant="fill"
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 });
