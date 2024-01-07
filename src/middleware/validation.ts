@@ -15,7 +15,7 @@ export const validation = defineMiddleware(async (context, next) => {
         case apiRoutes.updateMe.path: {
             return AuthValidation.updateMe(context, next);
         }
-        case apiRoutes.createRequest.path: {
+        case apiRoutes.requests.path: {
             return RequestsValidation.create(context, next);
         }
         default: {

@@ -124,7 +124,7 @@ All commands are run from the root of the project, from a terminal:
 
 -   ~Signup ui and logic~
 -   Password encryption
+-   Refactor prefetching
 -   Signup reCaptcha
--   Replace `src/shared/components/forms` with [modular-forms](https://modularforms.dev), [blocker](https://github.com/fabian-hiller/modular-forms/issues/145)
 -   Add forms validation
 -   Add locales

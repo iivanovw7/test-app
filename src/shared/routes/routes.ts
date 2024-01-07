@@ -5,12 +5,9 @@ export const BasePath = {
     login: "/login",
     notFound: "/404",
     profile: "/profile",
-    profileContacts: "/profile/contacts",
-    profileRequests: "/profile/requests",
-    profileSecurity: "/profile/security",
 } as const;
 
-const { home, login, notFound, profile, profileContacts, profileRequests, profileSecurity } = BasePath;
+const { home, login, notFound, profile } = BasePath;
 
 export type BasePathKey = keyof typeof BasePath;
 export type BasePath = (typeof BasePath)[BasePathKey];
@@ -20,25 +17,23 @@ export type Route = {
     path: string;
 };
 
-export const routes: Record<BasePathKey, Route> = {
+export const routes: Record<string, Route> = {
     home: { isPrivate: false, path: home },
     login: { isPrivate: false, path: login },
     notFound: { isPrivate: false, path: notFound },
     profile: { isPrivate: true, path: profile },
-    profileContacts: { isPrivate: true, path: profileContacts },
-    profileRequests: { isPrivate: true, path: profileRequests },
-    profileSecurity: { isPrivate: true, path: profileSecurity },
+    profileContacts: { isPrivate: true, path: `${profile}/contacts` },
+    profileRequests: { isPrivate: true, path: `${profile}/requests` },
+    profileSecurity: { isPrivate: true, path: `${profile}/security` },
 };
 
 export const apiRoutes: Record<string, Route> = {
-    createRequest: { isPrivate: true, path: "/api/requests/create" },
-    deleteRequest: { isPrivate: true, path: "/api/requests/delete" },
     getMe: { isPrivate: false, path: "/api/users/get-me" },
-    getMyRequests: { isPrivate: true, path: "/api/requests/get-my-requests" },
     login: { isPrivate: false, path: "/api/auth/login" },
     logout: { isPrivate: false, path: "/api/auth/logout" },
     refresh: { isPrivate: false, path: "/api/auth/refresh" },
     requestCount: { isPrivate: false, path: "/api/request-count" },
+    requests: { isPrivate: false, path: "/api/requests" },
     signup: { isPrivate: false, path: "/api/auth/signup" },
     updateMe: { isPrivate: true, path: "/api/users/update-me" },
     userCount: { isPrivate: false, path: "/api/user-count" },

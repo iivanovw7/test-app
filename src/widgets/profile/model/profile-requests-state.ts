@@ -3,7 +3,7 @@ import type { CreateRequestData, QueryRequest } from "#/api";
 import { makeApiRequest } from "@/shared/utils";
 import { $, createContextId, useStore } from "@builder.io/qwik";
 
-import { createRequest, deleteRequest, getMyRequests, getRequestCount } from "../api";
+import { createRequest, deleteRequest, getRequestCount, getRequests } from "../api";
 
 export type ProfileRequestFormFields = CreateRequestData;
 export type ProfileRequestFormValidation = Record<keyof ProfileRequestFormFields, Nullable<string>>;
@@ -13,8 +13,8 @@ export type ProfileRequestsFormState = {
     deleteRequest: (id: string) => Promise<Voidable<boolean>>;
     errorMessage: string;
     form: ProfileRequestFormFields;
-    getMyRequests: () => Promise<void>;
     getRequestCount: () => Promise<number>;
+    getRequests: (id: string) => Promise<void>;
     initialForm: ProfileRequestFormFields;
     isLoading: boolean;
     myRequests: QueryRequest[];
@@ -92,17 +92,6 @@ export const useProfileRequestsFormState = () => {
         }),
         errorMessage: "",
         form: { ...PROFILE_INITIAL_REQUEST_FORM },
-        getMyRequests: $(async function (this: ProfileRequestsFormState) {
-            let result = await makeApiRequest({
-                request: async () => {
-                    return await getMyRequests();
-                },
-            });
-
-            if (result?.success) {
-                this.myRequests = result.data?.data || [];
-            }
-        }),
         getRequestCount: $(async () => {
             let result = await makeApiRequest({
                 request: async () => {
@@ -115,6 +104,17 @@ export const useProfileRequestsFormState = () => {
             }
 
             return 0;
+        }),
+        getRequests: $(async function (this: ProfileRequestsFormState, id: string) {
+            let result = await makeApiRequest({
+                request: async () => {
+                    return await getRequests(id);
+                },
+            });
+
+            if (result?.success) {
+                this.myRequests = result.data?.data || [];
+            }
         }),
         initialForm: { ...PROFILE_INITIAL_REQUEST_FORM },
         isLoading: false,

@@ -5,7 +5,7 @@ import { apiRoutes } from "@/shared/routes";
 export const createRequest = async (
     values: CreateRequestData,
 ): Promise<TBasicApiError | TBasicApiResult<QueryRequest>> => {
-    let response = await fetch(apiRoutes.createRequest.path, { body: JSON.stringify(values), method: "POST" });
+    let response = await fetch(apiRoutes.requests.path, { body: JSON.stringify(values), method: "POST" });
 
     return response.json();
 };
@@ -16,16 +16,18 @@ export const getRequestCount = async (): Promise<TBasicApiError | TBasicApiResul
     return response.json();
 };
 
-export const getMyRequests = async (): Promise<TBasicApiError | TBasicApiListResult<QueryRequest>> => {
-    let response = await fetch(apiRoutes.getMyRequests.path);
+export const getRequests = async (authorId: string): Promise<TBasicApiError | TBasicApiListResult<QueryRequest>> => {
+    let parameters = new URLSearchParams({ authorId }).toString();
+    let url = `${apiRoutes.requests.path}?` + parameters;
+    let response = await fetch(url, {
+        method: "GET",
+    });
 
     return response.json();
 };
 
 export const deleteRequest = async (id: string): Promise<TBasicApiError | TBasicApiListResult<null>> => {
-    let parameters = new URLSearchParams({ id }).toString();
-    let url = `${apiRoutes.deleteRequest.path}?` + parameters;
-    let response = await fetch(url, {
+    let response = await fetch(`${apiRoutes.requests.path}/${id}`, {
         method: "DELETE",
     });
 

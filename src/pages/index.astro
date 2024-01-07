@@ -9,6 +9,7 @@ const { API_URL } = import.meta.env;
 
 const usersCountResponse = await fetch(`${API_URL}/${apiRoutes.userCount.path}`);
 const requestsCountResponse = await fetch(`${API_URL}/${apiRoutes.requestCount.path}`);
+const requestsResponse = await fetch(`${API_URL}/${apiRoutes.requests.path}`);
 
 const profileResponse = await fetch(`${API_URL}/${apiRoutes.getMe.path}`, {
     headers: {
@@ -19,9 +20,16 @@ const profileResponse = await fetch(`${API_URL}/${apiRoutes.getMe.path}`, {
 const userCount = await usersCountResponse.json();
 const requestCount = await requestsCountResponse.json();
 const profileResult = await profileResponse.json();
+const requests = await requestsResponse.json();
 
 ---
 
 <MainLayout description="Website" slug={routes.home.path} title="Home">
-    <Home profile={profileResult?.data} requestCount={requestCount?.data} slug={routes.home.path} userCount={userCount?.data} />
+    <Home
+        profile={profileResult?.data}
+        requestCount={requestCount?.data}
+        requests={requests?.data.data}
+        slug={routes.home.path}
+        userCount={userCount?.data}
+    />
 </MainLayout>

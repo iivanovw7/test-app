@@ -55,4 +55,14 @@
             background: theme("colors.stone.800") !important;
         }
     }
+
+    .datepicker-picker,
+    .datepicker-title,
+    .datepicker-controls > * {
+        @apply bg-stone-200 dark:bg-stone-800 !important;
+    }
+
+    .datepicker-picker {
+        @apply border border-brand-border dark:border-brand-dark-border shadow-sm p-2 !important;
+    }
 }

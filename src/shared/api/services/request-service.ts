@@ -59,7 +59,7 @@ export const RequestService = {
             }
 
             let { insertedId } = await requestsCollection.insertOne({
-                authorId: user._id,
+                author: user,
                 avatarUrl: body.avatarUrl,
                 createdAt: dayjs().valueOf(),
                 description: body.description,
@@ -91,9 +91,17 @@ export const RequestService = {
             });
         }
     },
-    delete: async ({ cookies, request }) => {
+    delete: async ({ cookies, params, request }) => {
         try {
-            let id = new URL(request.url).searchParams.get("id");
+            let { id } = params;
+
+            if (!id) {
+                return Result.errorResponse(HttpStatus.NOT_FOUND, {
+                    code: ErrorCode.USER_NOT_FOUND,
+                    message: "User ID not found",
+                });
+            }
+
             let client = await clientPromise;
             let usersCollection = client.db(DB_NAME).collection("users");
             let requestsCollection = client.db(DB_NAME).collection("requests");
@@ -123,7 +131,7 @@ export const RequestService = {
             }
 
             let { deletedCount } = await requestsCollection.deleteOne({
-                _id: new ObjectId(id!),
+                _id: new ObjectId(id),
             });
 
             if (deletedCount > 0) {
@@ -142,42 +150,29 @@ export const RequestService = {
             });
         }
     },
-    getMyRequests: async ({ cookies, request }) => {
+    requests: async ({ request }) => {
         try {
+            let authorId = new URL(request.url).searchParams.get("authorId");
             let client = await clientPromise;
-            let usersCollection = client.db(DB_NAME).collection("users");
             let requestsCollection = client.db(DB_NAME).collection("requests");
-            let refreshToken = cookies.get(REFRESH_TOKEN_KEY)?.value || request.headers.get(REFRESH_TOKEN_KEY);
 
-            if (!refreshToken) {
-                cleanTokens(cookies);
-
-                return Result.errorResponse(HttpStatus.UNAUTHORIZED, {
-                    code: ErrorCode.UNAUTHORIZED,
-                    message: "Unauthorized",
-                });
-            }
-
-            let verifyResult = (await jwtVerify(refreshToken, REFRESH_TOKEN_SECRET)) as AnyObject;
-
-            let user = await usersCollection.findOne<QueryUserModel>(
-                { email: verifyResult.payload.email },
-                { projection: { emailVerified: 0 } },
-            );
-
-            if (!user) {
-                return Result.errorResponse(HttpStatus.NOT_FOUND, {
-                    code: ErrorCode.USER_NOT_FOUND,
-                    message: "Author not found",
-                });
-            }
-
-            let requests = await requestsCollection.find({ authorId: user._id }).toArray();
+            let requests = await requestsCollection
+                .aggregate([
+                    ...(authorId ? [{ $match: { "author._id": new ObjectId(authorId) } }] : []),
+                    {
+                        $addFields: {
+                            "author.id": "$author._id",
+                            id: "$_id",
+                        },
+                    },
+                ])
+                .project({ _id: 0, "author._id": 0 })
+                .toArray();
 
             return Result.successResponse({
                 data: {
                     count: requests.length,
-                    data: requests.map(({ _id, ...restFields }) => ({ ...restFields, id: _id })),
+                    data: requests,
                 },
             });
         } catch (error) {
