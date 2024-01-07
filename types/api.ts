@@ -77,7 +77,7 @@ export type LoginData = {
 
 export type QueryRequestModel = {
     _id: ObjectId;
-    authorId: ObjectId;
+    author: ObjectId;
     avatarUrl: string;
     createdAt: string;
     description: string;
@@ -87,11 +87,12 @@ export type QueryRequestModel = {
     title: string;
 };
 
-export type QueryRequest = Omit<QueryRequestModel, "_id"> & {
+export type QueryRequest = Omit<QueryRequestModel, "_id" | "author"> & {
+    author: QueryUser;
     id: string;
 };
 
-export type CreateRequestData = Omit<QueryRequestModel, "_id" | "authorId" | "createdAt">;
+export type CreateRequestData = Omit<QueryRequestModel, "_id" | "author" | "createdAt">;
 
 export const ErrorCode = {
     INTERNAL_SERVER_ERROR: 5000,

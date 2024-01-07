@@ -59,7 +59,7 @@ export const RequestService = {
             }
 
             let { insertedId } = await requestsCollection.insertOne({
-                authorId: user._id,
+                author: user,
                 avatarUrl: body.avatarUrl,
                 createdAt: dayjs().valueOf(),
                 description: body.description,
@@ -157,17 +157,22 @@ export const RequestService = {
             let requestsCollection = client.db(DB_NAME).collection("requests");
 
             let requests = await requestsCollection
-                .find({
-                    ...(authorId && {
-                        authorId: new ObjectId(authorId),
-                    }),
-                })
+                .aggregate([
+                    ...(authorId ? [{ $match: { "author._id": new ObjectId(authorId) } }] : []),
+                    {
+                        $addFields: {
+                            "author.id": "$author._id",
+                            id: "$_id",
+                        },
+                    },
+                ])
+                .project({ _id: 0, "author._id": 0 })
                 .toArray();
 
             return Result.successResponse({
                 data: {
                     count: requests.length,
-                    data: requests.map(({ _id, ...restFields }) => ({ ...restFields, id: _id })),
+                    data: requests,
                 },
             });
         } catch (error) {

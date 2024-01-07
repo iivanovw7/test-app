@@ -74,7 +74,7 @@ export const Home = component$<HomeProperties>((properties) => {
                                                     Starts at:
                                                 </span>
                                                 <span class="pl-2 text-brand-text dark:text-brand-dark-text">
-                                                    {dayjs(element.startsAt).format("hh:mm MMM DD, YYYY")}
+                                                    {dayjs(element.startsAt).format("MMM DD, YYYY")}
                                                 </span>
                                             </div>
                                             <div class="flex items-center">
@@ -82,28 +82,12 @@ export const Home = component$<HomeProperties>((properties) => {
                                                     Ends at:
                                                 </span>
                                                 <span class="pl-2 text-brand-text dark:text-brand-dark-text">
-                                                    {dayjs(element.endsAt).format("hh:mm MMM DD, YYYY")}
+                                                    {dayjs(element.endsAt).format("MMM DD, YYYY")}
                                                 </span>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                                <p class="mt-4">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque suscipit, orci
-                                    non vulputate porta, sem erat lacinia sem, ac tincidunt nibh turpis a turpis.
-                                    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
-                                    curae; Proin ullamcorper ac diam et porttitor. Proin mollis enim eros, sed rutrum
-                                    nunc fermentum sed. Nullam fermentum auctor leo, in pretium turpis varius non. Cras
-                                    euismod est eget dolor pharetra semper. Nulla ut dictum dolor, vel vestibulum velit.
-                                    Morbi arcu ipsum, interdum id iaculis id, rutrum sed enim. Orci varius natoque
-                                    penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam imperdiet
-                                    turpis at risus rhoncus, in mollis odio aliquam. Praesent eget eros purus. Praesent
-                                    imperdiet id diam a rutrum. Nam laoreet ullamcorper sapien, eget tincidunt magna
-                                    dictum rutrum. Nam ut cursus magna
-                                    <span class="text-brand-secondary">educational</span> and{" "}
-                                    <span class="text-brand-tertiary">promotional</span>
-                                    purposes.
-                                </p>
                             </article>
                         </section>
                     </main>

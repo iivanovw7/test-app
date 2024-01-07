@@ -124,7 +124,7 @@ export const ProfileRequestsForm = component$(() => {
                             <Input
                                 errorText={state.validation.title?.toString()}
                                 id="profile-requests-form-title"
-                                label="Name"
+                                label="Title"
                                 onInput$={handleInput("title")}
                                 placeholder="Pets name"
                                 required
@@ -134,7 +134,7 @@ export const ProfileRequestsForm = component$(() => {
                             <Textarea
                                 errorText={state.validation.description?.toString()}
                                 id="profile-requests-form-description"
-                                label="Street"
+                                label="Description"
                                 onInput$={handleInput("description")}
                                 placeholder="Description"
                                 required
@@ -198,7 +198,7 @@ export const ProfileRequestsForm = component$(() => {
                     )}
                 >
                     <table class="mt-0 w-full text-left text-sm rtl:text-right">
-                        <thead class="text-xs uppercase">
+                        <thead class="whitespace-nowrap text-xs uppercase">
                             <tr>
                                 <th class="p-2 font-bold text-brand-text dark:text-brand-dark-text" scope="col">
                                     Title
@@ -217,13 +217,17 @@ export const ProfileRequestsForm = component$(() => {
                         <tbody>
                             {state.myRequests.map((row) => (
                                 <tr class="border-b border-gray-300 dark:border-gray-700" key={row.id}>
-                                    <th class="whitespace-nowrap p-2" scope="row">
+                                    <th class="max-w-[120px] truncate whitespace-nowrap p-2" scope="row">
                                         {row.title}
                                     </th>
-                                    <td class="whitespace-nowrap p-2">{row.description}</td>
-                                    <td class="p-2">{dayjs(row.startsAt).format("MMM DD, YYYY")}</td>
-                                    <td class="p-2">{dayjs(row.endsAt).format("MMM DD, YYYY")}</td>
-                                    <td class="p-2">
+                                    <td class="max-w-[240px] truncate whitespace-nowrap p-2">{row.description}</td>
+                                    <td class="whitespace-nowrap p-2 align-middle">
+                                        {dayjs(row.startsAt).format("MMM DD, YYYY")}
+                                    </td>
+                                    <td class="whitespace-nowrap p-2 align-middle">
+                                        {dayjs(row.endsAt).format("MMM DD, YYYY")}
+                                    </td>
+                                    <td class="whitespace-nowrap p-2 align-middle">
                                         <Button
                                             color="error"
                                             onClick$={handleDeleteClick(row.id)}

@@ -7,7 +7,7 @@ export const requestDataValidationSchema = z.object({
     avatarUrl: z.string({ required_error: "Invalid avatar URL" }).trim(),
     description: z
         .string({ required_error: "Description is required" })
-        .max(180, { message: "Description length must be at most 60 characters long" })
+        .max(1000, { message: "Description length must be at most 1000 characters long" })
         .trim(),
     endsAt: z.string({ required_error: "End date is required" }).min(1, { message: "End date is required" }),
     startsAt: z.string({ required_error: "Start date is required" }).min(1, { message: "Start date is required" }),
